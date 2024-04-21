@@ -1,4 +1,4 @@
-package com.example.privtestproj3;
+package com.example.recipesavesharevsp24;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import com.example.privtestproj3.DB.AppDataBase;
-import com.example.privtestproj3.DB.RecipeShareSaveDAO;
+import com.example.recipesavesharevsp24.DB.AppDataBase;
+import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 
 public class CreateAccountActivity extends AppCompatActivity {
         private EditText mUsernameEditText;

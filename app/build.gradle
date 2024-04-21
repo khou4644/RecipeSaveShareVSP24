@@ -3,17 +3,28 @@ plugins {
 }
 
 android {
-    namespace 'com.example.recipesavesharevsp24'
+    namespace 'com.example.privtestproj3'
     compileSdk 34
 
+    dataBinding { enabled = true }
+
     defaultConfig {
-        applicationId "com.example.recipesavesharevsp24"
-        minSdk 34
+        applicationId "com.example.privtestproj3"
+        minSdk 33
         targetSdk 34
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
+        buildFeatures {
+            dataBinding true
+        }
     }
 
     buildTypes {
@@ -26,6 +37,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
 }
 
 dependencies {
@@ -37,4 +50,12 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+
+
+    // Adding the room DB
+    def room_version = "2.5.1"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.databinding:databinding-runtime:4.2.2'
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }

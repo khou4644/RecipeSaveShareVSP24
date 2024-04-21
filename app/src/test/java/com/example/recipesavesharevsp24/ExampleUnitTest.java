@@ -1,4 +1,4 @@
-package com.example.recipesavesharevsp24;
+package com.DB.recipesavesharevsp24;
 
 import org.junit.Test;
 

@@ -11,7 +11,7 @@ import com.example.recipesavesharevsp24.RecipeShareSave;
 import com.example.recipesavesharevsp24.User;
 
 @Database(entities = {RecipeShareSave.class, User.class}, version = 1, exportSchema = true)
-@TypeConverters({DateTypeConverter.class})
+@TypeConverters({com.DB.recipesavesharevsp24.DB.DateTypeConverter.class})
 public abstract class AppDataBase extends RoomDatabase {
     public static final String DATABASE_NAME = "RecipeShareSave.db";
     public static final String RECIPESHARESAVE_TABLE = "RECIPESHARESAVE_TABLE";
