@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.databinding.PageLandingBinding;
@@ -28,8 +29,8 @@ import java.util.List;
 
 public class LandingPage extends AppCompatActivity {
 
-    private static final String USER_ID_KEY = "com.example.privtestproj3.userIdKey";
-    private static final String PREFERENCES_KEY = "com.example.privtestproj3.PREFERENCES_KEY";
+    private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
+    private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
     private PageLandingBinding binding;
 
     private TextView mMainDisplay;

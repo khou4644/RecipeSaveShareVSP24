@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Button;
 
-import com.example.privtestproj3.R;
 
 public class MainActivity extends AppCompatActivity {
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
