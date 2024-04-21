@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Button;
 
+import com.example.privtestproj3.R;
+
 public class MainActivity extends AppCompatActivity {
-    private static final String USER_ID_KEY = "com.example.privtestproj3.userIdKey";
-    private static final String PREFERENCES_KEY = "com.example.privtestproj3.PREFERENCES_KEY";
+    private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
+    private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
 
     private Button mLoginButton;
     private Button mCreateAccButton;

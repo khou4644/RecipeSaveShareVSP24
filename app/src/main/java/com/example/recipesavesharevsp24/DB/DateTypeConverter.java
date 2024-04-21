@@ -1,4 +1,4 @@
-package com.DB.recipesavesharevsp24.DB;
+package com.example.recipesavesharevsp24.DB;
 
 import androidx.room.TypeConverter;
 
