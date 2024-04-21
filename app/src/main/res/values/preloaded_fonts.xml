@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
-        <item>@font/berkshire_swash</item>
         <item>@font/black_han_sans</item>
-        <item>@font/dynalight</item>
-        <item>@font/major_mono_display</item>
     </array>
 </resources>

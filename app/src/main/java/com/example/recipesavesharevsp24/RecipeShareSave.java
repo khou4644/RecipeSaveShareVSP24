@@ -2,7 +2,6 @@ package com.example.recipesavesharevsp24;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 
 import java.util.Date;

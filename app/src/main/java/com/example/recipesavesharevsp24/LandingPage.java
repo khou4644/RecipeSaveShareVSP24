@@ -1,4 +1,4 @@
-package com.example.privtestproj3;
+package com.example.recipesavesharevsp24;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +20,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import com.example.privtestproj3.DB.AppDataBase;
-import com.example.privtestproj3.DB.RecipeShareSaveDAO;
-import com.example.privtestproj3.databinding.PageLandingBinding;
+import com.example.recipesavesharevsp24.DB.AppDataBase;
+import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
+import com.example.recipesavesharevsp24.databinding.PageLandingBinding;
 
 import java.util.List;
 
