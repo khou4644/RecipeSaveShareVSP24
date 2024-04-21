@@ -1,4 +1,4 @@
-package com.example.recipesavesharevsp24;
+package com.example.privtestproj3;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,17 +20,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import com.example.privtestproj3.R;
-import com.example.recipesavesharevsp24.DB.AppDataBase;
-import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
+import com.example.privtestproj3.DB.AppDataBase;
+import com.example.privtestproj3.DB.RecipeShareSaveDAO;
 import com.example.privtestproj3.databinding.PageLandingBinding;
 
 import java.util.List;
 
 public class LandingPage extends AppCompatActivity {
 
-    private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
-    private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
+    private static final String USER_ID_KEY = "com.example.privtestproj3.userIdKey";
+    private static final String PREFERENCES_KEY = "com.example.privtestproj3.PREFERENCES_KEY";
     private PageLandingBinding binding;
 
     private TextView mMainDisplay;
@@ -116,15 +115,15 @@ public class LandingPage extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        if (mUser != null){
-//            MenuItem item = menu.findItem(R.id.item1);
-//            item.setTitle(mUser.getUserName());
-//
-//        }
-//        return super.onPrepareOptionsMenu(menu);
-//    }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mUser != null){
+            MenuItem item = menu.findItem(R.id.item1);
+            item.setTitle(mUser.getUserName());
+
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     //TODO finish this
 //    private void addUserToPreference(int userId) {
