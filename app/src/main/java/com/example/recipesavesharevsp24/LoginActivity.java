@@ -12,13 +12,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String USER_ID_KEY = "com.example.privtestproj3.userIdKey";
-    private static final String PREFERENCES_KEY = "com.example.privtestproj3.PREFERENCES_KEY";
+    private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
+    private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
     private EditText mUsernameField;
 
     private EditText mPasswordField;
@@ -43,12 +44,22 @@ public class LoginActivity extends AppCompatActivity {
         loginDisplay();
     }
 
-    private void createDefaultUsers(){
-            // Create the predefined users
-            User defaultUser = new User("testuser1", "testuser1", false);
-            User defaultAdmin = new User("admin2", "admin2", true);
-            mRecipeShareSaveDAO.insert(defaultUser, defaultAdmin);
+    private void createDefaultUsers() {
+        // Check if the default users already exist in the database
+        User existingDefaultUser = mRecipeShareSaveDAO.getUserByUsername("testuser1");
+        User existingDefaultAdmin = mRecipeShareSaveDAO.getUserByUsername("admin2");
 
+        if (existingDefaultUser == null) {
+            // Create the default user if it doesn't exist
+            User defaultUser = new User("testuser1", "testuser1", false);
+            mRecipeShareSaveDAO.insert(defaultUser);
+        }
+
+        if (existingDefaultAdmin == null) {
+            // Create the default admin if it doesn't exist
+            User defaultAdmin = new User("admin2", "admin2", true);
+            mRecipeShareSaveDAO.insert(defaultAdmin);
+        }
     }
     private void loginDisplay() {
         mUsernameField = findViewById(R.id.editTextCreateUserName);
