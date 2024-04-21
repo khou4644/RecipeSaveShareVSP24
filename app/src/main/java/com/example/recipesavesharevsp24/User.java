@@ -1,9 +1,9 @@
-package com.example.recipesavesharevsp24;
+package com.example.privtestproj3;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.recipesavesharevsp24.DB.AppDataBase;
+import com.example.privtestproj3.DB.AppDataBase;
 
 @Entity(tableName = AppDataBase.USER_TABLE)
 public class User {
