@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace 'com.example.privtestproj3'
+    namespace 'com.example.recipesavesharevsp24'
     compileSdk 34
 
     dataBinding { enabled = true }
 
     defaultConfig {
-        applicationId "com.example.privtestproj3"
+        applicationId "com.example.recipesavesharevsp24"
         minSdk 33
         targetSdk 34
         versionCode 1
