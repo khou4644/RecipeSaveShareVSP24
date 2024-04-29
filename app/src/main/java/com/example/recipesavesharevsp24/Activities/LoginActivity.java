@@ -1,4 +1,4 @@
-package com.example.recipesavesharevsp24;
+package com.example.recipesavesharevsp24.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import androidx.room.Room;
 
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
+import com.example.recipesavesharevsp24.R;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.recipesavesharevsp24;
+package com.example.recipesavesharevsp24.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import androidx.room.Room;
 
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
+import com.example.recipesavesharevsp24.R;
 import com.example.recipesavesharevsp24.databinding.PageLandingBinding;
 
 import java.util.List;
@@ -43,6 +44,8 @@ public class LandingPage extends AppCompatActivity {
 
     private Button mAdminButton;
 
+    private Button mViewPostsButton;
+
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
 
     private List<RecipeShareSave> mRecipeShareSaveList;
@@ -59,7 +62,7 @@ public class LandingPage extends AppCompatActivity {
         binding = PageLandingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mPreferences = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+        getPrefs();
 
         getDataBase();
 
@@ -83,6 +86,11 @@ public class LandingPage extends AppCompatActivity {
         mIngredients = binding.mainIngredientsEditText;
         mSubmit = binding.mainSubmitButton;
 
+        mViewPostsButton = findViewById(R.id.viewPostsButton);
+        mViewPostsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingPage.this, PostActivity.class);
+            startActivity(intent);
+        });
         mMainDisplay.setMovementMethod(new ScrollingMovementMethod());
         mIngredients.setMovementMethod(new ScrollingMovementMethod());
 

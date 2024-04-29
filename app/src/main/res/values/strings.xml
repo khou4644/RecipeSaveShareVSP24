@@ -8,7 +8,7 @@
     <string name="username">enter username</string>
     <string name="password">enter password</string>
     <string name="login">Login</string>
-    <string name="logout">Do you want to logout?</string>
+    <string name="logout">Logout?</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="verify_new_account">verify new account</string>
@@ -19,4 +19,8 @@
     <string name="recipesharesave_v_sp24">Welcome To RecipeShareSave V SP24</string>
     <string name="please_create_new_account_details_below">Please create new account details below :)</string>
     <string name="super_top_secret_admin_button">Super Top Secret Admin Button</string>
+    <string name="view_user_posts">View User Posts</string>
+    <string name="like">Like</string>
+    <string name="liked_posts">Liked Posts</string>
+    <string name="dislike">Dislike</string>
 </resources>

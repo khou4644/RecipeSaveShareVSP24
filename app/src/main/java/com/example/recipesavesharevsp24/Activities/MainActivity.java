@@ -1,4 +1,4 @@
-package com.example.recipesavesharevsp24;
+package com.example.recipesavesharevsp24.Activities;
 
 import android.os.Bundle;
 
@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Button;
+
+import com.example.recipesavesharevsp24.R;
 
 
 public class MainActivity extends AppCompatActivity {

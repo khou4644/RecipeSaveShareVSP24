@@ -1,4 +1,4 @@
-package com.example.recipesavesharevsp24;
+package com.example.recipesavesharevsp24.Activities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

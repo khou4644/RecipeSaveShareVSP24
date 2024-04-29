@@ -1,8 +1,9 @@
-package com.example.recipesavesharevsp24;
+package com.example.recipesavesharevsp24.Activities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.example.recipesavesharevsp24.DB.AppDataBase;
+import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 
 import java.util.Date;
 
@@ -19,6 +20,10 @@ public class RecipeShareSave {
     private Date mDate;
 
     private int mUserId;
+
+    private int likeCount;
+
+    private int dislikeCount;
 
     public RecipeShareSave(String recipe, int serves, String ingredients, int userId) {
         mRecipe = recipe;
@@ -85,5 +90,21 @@ public class RecipeShareSave {
 
     public void setDate(Date date) {
         mDate = date;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public int getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(int dislikeCount) {
+        this.dislikeCount = dislikeCount;
     }
 }
