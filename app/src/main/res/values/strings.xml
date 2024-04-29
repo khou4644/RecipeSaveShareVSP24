@@ -23,4 +23,5 @@
     <string name="like">Like</string>
     <string name="liked_posts">Liked Posts</string>
     <string name="dislike">Dislike</string>
+    <string name="back_to_previous_page">Back to previous page</string>
 </resources>
