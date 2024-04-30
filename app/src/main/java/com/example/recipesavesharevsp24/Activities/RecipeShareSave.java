@@ -21,9 +21,6 @@ public class RecipeShareSave {
 
     private int mUserId;
 
-    private int likeCount;
-
-    private int dislikeCount;
 
     public RecipeShareSave(String recipe, int serves, String ingredients, int userId) {
         mRecipe = recipe;
@@ -92,19 +89,4 @@ public class RecipeShareSave {
         mDate = date;
     }
 
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public int getDislikeCount() {
-        return dislikeCount;
-    }
-
-    public void setDislikeCount(int dislikeCount) {
-        this.dislikeCount = dislikeCount;
-    }
 }

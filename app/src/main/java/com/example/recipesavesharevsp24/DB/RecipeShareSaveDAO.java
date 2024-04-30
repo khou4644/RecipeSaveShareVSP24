@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.recipesavesharevsp24.Activities.DislikedPost;
-import com.example.recipesavesharevsp24.Activities.LikedPost;
+import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
 
@@ -60,25 +60,18 @@ public interface RecipeShareSaveDAO {
     @Query("SELECT * FROM " + AppDataBase.USER_TABLE + " Where mUserId = :userId")
     User getUserByUserId(int userId);
 
-    @Insert
-    void insertLikedPost(LikedPost likedPost);
+    @Query("SELECT * FROM post_interactions WHERE user_id = :userId AND post_id = :postId")
+    PostInteraction getPostInteractionByUserIdAndPostId(int userId, int postId);
 
-    @Query("SELECT * FROM liked_posts WHERE user_id = :userId")
-    List<LikedPost> getLikedPostsByUserId(int userId);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertOrUpdatePostInteraction(PostInteraction postInteraction);
 
+    @Query("DELETE FROM post_interactions WHERE user_id = :userId AND post_id = :postId")
+    void deletePostInteraction(int userId, int postId);
 
-    @Query("SELECT * FROM liked_posts WHERE user_id = :userId AND post_id = :postId")
-    List<LikedPost> getLikedPostsByUserIdAndPostId(int userId, int postId);
+    @Query("SELECT COUNT(*) FROM post_interactions WHERE post_id = :postId AND interaction_type = 1")
+    int getLikeCount(int postId);
 
-    @Query("DELETE FROM liked_posts WHERE user_id = :userId AND post_id = :postId")
-    void deleteLikedPost(int userId, int postId);
-
-    @Insert
-    void insertDislikedPost(DislikedPost dislikedPost);
-
-    @Query("SELECT * FROM disliked_posts WHERE user_id = :userId AND post_id = :postId")
-    List<DislikedPost> getDislikedPostsByUserIdAndPostId(int userId, int postId);
-
-    @Query("DELETE FROM disliked_posts WHERE user_id = :userId AND post_id = :postId")
-    void deleteDislikedPost(int userId, int postId);
+    @Query("SELECT COUNT(*) FROM post_interactions WHERE post_id = :postId AND interaction_type = -1")
+    int getDislikeCount(int postId);
 }

@@ -11,8 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.recipesavesharevsp24.Activities.DislikedPost;
-import com.example.recipesavesharevsp24.Activities.LikedPost;
+import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
@@ -55,104 +54,71 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         String username = user != null ? user.getUserName() : "Unknown User";
         holder.postTextView.setText("Username: " + username + "\n" + post);
 
-        // Check if the post is liked by the current user
-        List<LikedPost> existingLikes = mRecipeShareSaveDAO.getLikedPostsByUserIdAndPostId(getCurrentUserId(), post.getLogId());
-        boolean isLiked = !existingLikes.isEmpty();
-
-        // Check if the post is disliked by the current user
-        List<DislikedPost> existingDislikes = mRecipeShareSaveDAO.getDislikedPostsByUserIdAndPostId(getCurrentUserId(), post.getLogId());
-        boolean isDisliked = !existingDislikes.isEmpty();
+        // Get the current user's interaction with the post
+        PostInteraction postInteraction = mRecipeShareSaveDAO.getPostInteractionByUserIdAndPostId(getCurrentUserId(), post.getLogId());
+        final int[] interactionType = {postInteraction != null ? postInteraction.getInteractionType() : 0};
 
         // Set the initial like and dislike count texts
-        holder.likeCountTextView.setText(String.valueOf(post.getLikeCount()));
-        holder.dislikeCountTextView.setText(String.valueOf(post.getDislikeCount()));
+        updateLikeDislikeCounts(holder, post);
+
+        // Set the initial state of the like and dislike buttons
+        holder.likeButton.setSelected(interactionType[0] == 1);
+        holder.dislikeButton.setSelected(interactionType[0] == -1);
 
         holder.likeButton.setOnClickListener(v -> {
-            // Unlike the post if already liked
-            if (isLiked) {
-                mRecipeShareSaveDAO.deleteLikedPost(getCurrentUserId(), post.getLogId());
-                post.setLikeCount(post.getLikeCount() - 1);
-                holder.likeCountTextView.setText(String.valueOf(post.getLikeCount()));
+            if (interactionType[0] == 1) {
+                // User already liked the post, so remove the like
+                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
+                interactionType[0] = 0;
+                holder.likeButton.setSelected(false);
             } else {
-                // Like the post
-                LikedPost likedPost = new LikedPost(getCurrentUserId(), post.getLogId());
-                likePost(likedPost, post);
-                holder.likeCountTextView.setText(String.valueOf(post.getLikeCount()));
+                // User hasn't liked the post yet or previously disliked it, so add a like
+                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), 1);
+                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
+                interactionType[0] = 1;
+                holder.likeButton.setSelected(true);
 
-                // Remove any existing dislike
-                mRecipeShareSaveDAO.deleteDislikedPost(getCurrentUserId(), post.getLogId());
-                post.setDislikeCount(post.getDislikeCount() - 1);
-                holder.dislikeCountTextView.setText(String.valueOf(post.getDislikeCount()));
+                // If the user previously disliked the post, remove the dislike
+                if (holder.dislikeButton.isSelected()) {
+                    mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
+                    holder.dislikeButton.setSelected(false);
+                }
             }
+
+            updateLikeDislikeCounts(holder, post);
         });
 
         holder.dislikeButton.setOnClickListener(v -> {
-            // Undislike the post if already disliked
-            if (isDisliked) {
-                mRecipeShareSaveDAO.deleteDislikedPost(getCurrentUserId(), post.getLogId());
-                post.setDislikeCount(post.getDislikeCount() - 1);
-                holder.dislikeCountTextView.setText(String.valueOf(post.getDislikeCount()));
+            if (interactionType[0] == -1) {
+                // User already disliked the post, so remove the dislike
+                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
+                interactionType[0] = 0;
+                holder.dislikeButton.setSelected(false);
             } else {
-                // Dislike the post
-                DislikedPost dislikedPost = new DislikedPost(getCurrentUserId(), post.getLogId());
-                dislikePost(dislikedPost, post);
-                holder.dislikeCountTextView.setText(String.valueOf(post.getDislikeCount()));
+                // User hasn't disliked the post yet or previously liked it, so add a dislike
+                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), -1);
+                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
+                interactionType[0] = -1;
+                holder.dislikeButton.setSelected(true);
 
-                // Remove any existing like
-                mRecipeShareSaveDAO.deleteLikedPost(getCurrentUserId(), post.getLogId());
-                post.setLikeCount(post.getLikeCount() - 1);
-                holder.likeCountTextView.setText(String.valueOf(post.getLikeCount()));
+                // If the user previously liked the post, remove the like
+                if (holder.likeButton.isSelected()) {
+                    mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
+                    holder.likeButton.setSelected(false);
+                }
             }
+
+            updateLikeDislikeCounts(holder, post);
         });
     }
 
-    private boolean isPostLikedByUser(int postId, int userId) {
-        // Query the database to check if the post is liked by the user
-        List<LikedPost> likedPosts = mRecipeShareSaveDAO.getLikedPostsByUserIdAndPostId(userId, postId);
-        return !likedPosts.isEmpty();
+    private void updateLikeDislikeCounts(PostViewHolder holder, RecipeShareSave post) {
+        int likeCount = mRecipeShareSaveDAO.getLikeCount(post.getLogId());
+        int dislikeCount = mRecipeShareSaveDAO.getDislikeCount(post.getLogId());
+        holder.likeCountTextView.setText(String.valueOf(likeCount));
+        holder.dislikeCountTextView.setText(String.valueOf(dislikeCount));
     }
 
-    private void likePost(LikedPost likedPost, RecipeShareSave post) {
-        // Check if the post is already liked by the current user
-        List<LikedPost> existingLikes = mRecipeShareSaveDAO.getLikedPostsByUserIdAndPostId(getCurrentUserId(), post.getLogId());
-        List<DislikedPost> existingDislikes = mRecipeShareSaveDAO.getDislikedPostsByUserIdAndPostId(getCurrentUserId(), post.getLogId());
-
-        if (existingLikes.isEmpty() && existingDislikes.isEmpty()) {
-            // Insert the liked post into the database
-            mRecipeShareSaveDAO.insertLikedPost(likedPost);
-            post.setLikeCount(post.getLikeCount() + 1);
-        } else if (existingDislikes.isEmpty()) {
-            // Post is already liked, do nothing
-            return;
-        } else {
-            // Post is currently disliked, remove the dislike and add the like
-            mRecipeShareSaveDAO.deleteDislikedPost(getCurrentUserId(), post.getLogId());
-            post.setDislikeCount(post.getDislikeCount() - 1);
-            mRecipeShareSaveDAO.insertLikedPost(likedPost);
-            post.setLikeCount(post.getLikeCount() + 1);
-        }
-    }
-
-    private void dislikePost(DislikedPost dislikedPost, RecipeShareSave post) {
-        // Check if the post is already disliked by the current user
-        List<DislikedPost> existingDislikes = mRecipeShareSaveDAO.getDislikedPostsByUserIdAndPostId(getCurrentUserId(), post.getLogId());
-        List<LikedPost> existingLikes = mRecipeShareSaveDAO.getLikedPostsByUserIdAndPostId(getCurrentUserId(), post.getLogId());
-
-        if (existingDislikes.isEmpty() && existingLikes.isEmpty()) {
-            // Insert the disliked post into the database
-            mRecipeShareSaveDAO.insertDislikedPost(dislikedPost);
-            post.setDislikeCount(post.getDislikeCount() + 1);
-        } else if (existingLikes.isEmpty()) {
-            // Post is already disliked, do nothing
-            return;
-        } else {
-            // Post is currently liked, remove the like and add the dislike
-            mRecipeShareSaveDAO.deleteLikedPost(getCurrentUserId(), post.getLogId());
-            post.setLikeCount(post.getLikeCount() - 1);
-            mRecipeShareSaveDAO.insertDislikedPost(dislikedPost);
-            post.setDislikeCount(post.getDislikeCount() + 1);
-        }
-    }
     private int getCurrentUserId() {
         // Get the current user's ID (implement this based on your authentication system)
         // For example, you can retrieve it from SharedPreferences or a logged-in user object

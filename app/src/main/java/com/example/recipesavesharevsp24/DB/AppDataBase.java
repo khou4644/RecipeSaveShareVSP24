@@ -7,12 +7,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.example.recipesavesharevsp24.Activities.DislikedPost;
-import com.example.recipesavesharevsp24.Activities.LikedPost;
+import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
 
-@Database(entities = {RecipeShareSave.class, User.class, LikedPost.class, DislikedPost.class}, version = 2, exportSchema = true)
+@Database(entities = {RecipeShareSave.class, User.class, PostInteraction.class}, version = 2, exportSchema = true)
 @TypeConverters({com.example.recipesavesharevsp24.DB.DateTypeConverter.class})
 public abstract class AppDataBase extends RoomDatabase {
     public static final String DATABASE_NAME = "RecipeShareSave.db";

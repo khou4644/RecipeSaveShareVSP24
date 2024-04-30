@@ -21,10 +21,9 @@ import java.util.List;
 public class LikedPostActivity extends AppCompatActivity {
 
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
-
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
-    private RecyclerView mLikedPostRecyclerView;
 
+    private RecyclerView mLikedPostRecyclerView;
     private PostAdapter mPostAdapter;
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
     private SharedPreferences mPreferences = null;
@@ -46,23 +45,24 @@ public class LikedPostActivity extends AppCompatActivity {
         // Get the current user's ID from shared preferences
         int userId = mPreferences.getInt(USER_ID_KEY, -1);
 
-        List<LikedPost> likedPosts;
         List<RecipeShareSave> likedRecipes = new ArrayList<>();
 
         try {
-            likedPosts = mRecipeShareSaveDAO.getLikedPostsByUserId(userId);
+            List<RecipeShareSave> allRecipes = mRecipeShareSaveDAO.getAllRecipeShareSave().getValue();
 
-            for (LikedPost likedPost : likedPosts) {
-                List<RecipeShareSave> recipe = mRecipeShareSaveDAO.getLikedRecipeShareSaveById(likedPost.getPostId());
-                if (recipe != null) {
-                    likedRecipes.add((RecipeShareSave) recipe);
+            if (allRecipes != null) {
+                for (RecipeShareSave recipe : allRecipes) {
+                    PostInteraction interaction = mRecipeShareSaveDAO.getPostInteractionByUserIdAndPostId(userId, recipe.getLogId());
+                    if (interaction != null && interaction.getInteractionType() == 1) {
+                        likedRecipes.add(recipe);
+                    }
                 }
             }
 
             mPostAdapter.setPosts(likedRecipes);
         } catch (Exception e) {
             Log.e("LikedPostActivity", "Error retrieving liked posts and recipes", e);
-            // Handle the error, e.g., show a error message to the user
+            // Handle the error, e.g., show an error message to the user
         }
     }
 
