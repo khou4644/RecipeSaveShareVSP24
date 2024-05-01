@@ -55,17 +55,17 @@ public class MyPostActivity extends AppCompatActivity {
         int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
         mUser = mRecipeShareSaveDAO.getUserByUserId(currentUserId);
 
-//        mPostAdapter = new PostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
-//        mPostRecyclerView.setAdapter(mPostAdapter);
-//
-//        List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
-//        mPostAdapter.setPosts(userPosts);
-
         mMyPostAdapter = new MyPostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
         mPostRecyclerView.setAdapter(mMyPostAdapter);
 
         List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
         mMyPostAdapter.setPosts(userPosts);
+
+//        mPostAdapter = new PostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
+//        mPostRecyclerView.setAdapter(mPostAdapter);
+//
+//        List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
+//        mPostAdapter.setPosts(userPosts);
     }
 
     // Include the rest of the methods from PostActivity, such as onCreateOptionsMenu, onPrepareOptionsMenu, onOptionsItemSelected, logoutUser, clearUserFromPref, and getPrefs
