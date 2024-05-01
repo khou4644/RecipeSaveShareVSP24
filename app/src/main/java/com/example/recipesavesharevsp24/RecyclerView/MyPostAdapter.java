@@ -43,7 +43,7 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_item_post, parent, false);
         return new PostViewHolder(view);
     }
 
@@ -59,11 +59,10 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
         final int[] interactionType = {postInteraction != null ? postInteraction.getInteractionType() : 0};
 
         // Set the initial like and dislike count texts
-        updateLikeDislikeCounts(holder, post);
+        //updateLikeDislikeCounts(holder, post);
 
         // Set the initial state of the like and dislike buttons
         holder.likeButton.setSelected(interactionType[0] == 1);
-        holder.dislikeButton.setSelected(interactionType[0] == -1);
 
         holder.likeButton.setOnClickListener(v -> {
             if (interactionType[0] == 1) {
@@ -77,47 +76,40 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
                 mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
                 interactionType[0] = 1;
                 holder.likeButton.setSelected(true);
-
-                // If the user previously disliked the post, remove the dislike
-                if (holder.dislikeButton.isSelected()) {
-                    mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
-                    holder.dislikeButton.setSelected(false);
-                }
             }
 
-            updateLikeDislikeCounts(holder, post);
+            //updateLikeDislikeCounts(holder, post);
         });
 
-        holder.dislikeButton.setOnClickListener(v -> {
-            if (interactionType[0] == -1) {
-                // User already disliked the post, so remove the dislike
-                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
-                interactionType[0] = 0;
-                holder.dislikeButton.setSelected(false);
-            } else {
-                // User hasn't disliked the post yet or previously liked it, so add a dislike
-                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), -1);
-                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
-                interactionType[0] = -1;
-                holder.dislikeButton.setSelected(true);
+        if (holder.deleteButton != null) {
+            holder.deleteButton.setOnClickListener(v -> {
+                // Delete the post from the database
+                mRecipeShareSaveDAO.delete(post);
 
-                // If the user previously liked the post, remove the like
-                if (holder.likeButton.isSelected()) {
-                    mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
-                    holder.likeButton.setSelected(false);
-                }
-            }
+                // Remove the post from the list and notify the adapter
+                mPostList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mPostList.size());
+            });
+        }
 
-            updateLikeDislikeCounts(holder, post);
+        holder.deleteButton.setOnClickListener(v -> {
+            // Delete the post from the database
+            mRecipeShareSaveDAO.delete(post);
+
+            // Remove the post from the list and notify the adapter
+            mPostList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, mPostList.size());
         });
     }
 
-    private void updateLikeDislikeCounts(PostViewHolder holder, RecipeShareSave post) {
-        int likeCount = mRecipeShareSaveDAO.getLikeCount(post.getLogId());
-        int dislikeCount = mRecipeShareSaveDAO.getDislikeCount(post.getLogId());
-        holder.likeCountTextView.setText(String.valueOf(likeCount));
-        holder.dislikeCountTextView.setText(String.valueOf(dislikeCount));
-    }
+//    private void updateLikeDislikeCounts(PostViewHolder holder, RecipeShareSave post) {
+//        int likeCount = mRecipeShareSaveDAO.getLikeCount(post.getLogId());
+//        int dislikeCount = mRecipeShareSaveDAO.getDislikeCount(post.getLogId());
+//        holder.likeCountTextView.setText(String.valueOf(likeCount));
+//        holder.dislikeCountTextView.setText(String.valueOf(dislikeCount));
+//    }
 
     private int getCurrentUserId() {
         // Get the current user's ID (implement this based on your authentication system)
@@ -137,17 +129,15 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
         Button likeButton;
-        Button dislikeButton;
+        Button deleteButton;
         TextView likeCountTextView;
-        TextView dislikeCountTextView;
         TextView postTextView;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);
             likeButton = itemView.findViewById(R.id.likeButton);
-            dislikeButton = itemView.findViewById(R.id.dislikeButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
             likeCountTextView = itemView.findViewById(R.id.likeCountTextView);
-            dislikeCountTextView = itemView.findViewById(R.id.dislikeCountTextView);
             postTextView = itemView.findViewById(R.id.postTextView);
         }
     }
