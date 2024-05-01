@@ -23,6 +23,10 @@ import com.example.recipesavesharevsp24.RecyclerView.PostAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 public class MyPostActivity extends AppCompatActivity {
 
@@ -38,6 +42,25 @@ public class MyPostActivity extends AppCompatActivity {
     private SharedPreferences mPreferences = null;
 
     private User mUser;
+
+    public static final int EDIT_POST_REQUEST_CODE = 1;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_POST_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            int updatedPostId = data.getIntExtra("updatedPostId", -1);
+            if (updatedPostId != -1) {
+                // Refresh the posts list
+                int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
+                List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
+                mMyPostAdapter.setPosts(userPosts);
+            }
+        }
+    }
+
+    private ActivityResultLauncher<Intent> editPostLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +84,32 @@ public class MyPostActivity extends AppCompatActivity {
         List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
         mMyPostAdapter.setPosts(userPosts);
 
+        mMyPostAdapter.setOnEditClickListener(postId -> {
+            Intent intent = new Intent(MyPostActivity.this, EditMyPostActivity.class);
+            intent.putExtra("postId", postId);
+            editPostLauncher.launch(intent);
+        });
+
 //        mPostAdapter = new PostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
 //        mPostRecyclerView.setAdapter(mPostAdapter);
 //
 //        List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
 //        mPostAdapter.setPosts(userPosts);
+
+        editPostLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            // Refresh the posts list
+                            int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
+                            List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
+                            mMyPostAdapter.setPosts(userPosts);
+                        }
+                    }
+                });
+
     }
 
     // Include the rest of the methods from PostActivity, such as onCreateOptionsMenu, onPrepareOptionsMenu, onOptionsItemSelected, logoutUser, clearUserFromPref, and getPrefs
@@ -93,12 +137,9 @@ public class MyPostActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.item1) {
             logoutUser();
             return true;
-        } else if (item.getTitle().equals(MENU_ITEM_LIKED_POSTS)) {
+        } else if (item.getItemId() == R.id.liked_posts) {
             Intent intent = new Intent(MyPostActivity.this, LikedPostActivity.class);
             startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.back_previous_page) {
-            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -137,5 +178,12 @@ public class MyPostActivity extends AppCompatActivity {
     private void getPrefs() {
         mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 
 }

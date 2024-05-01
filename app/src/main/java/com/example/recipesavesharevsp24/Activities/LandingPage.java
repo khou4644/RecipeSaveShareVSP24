@@ -1,5 +1,7 @@
 package com.example.recipesavesharevsp24.Activities;
 
+import static com.example.recipesavesharevsp24.Activities.MyPostActivity.EDIT_POST_REQUEST_CODE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -297,5 +299,36 @@ public class LandingPage extends AppCompatActivity {
         Intent intent = new Intent(context, LandingPage.class);
         intent.putExtra(USER_ID_KEY, userId);
         return intent;
+    }
+
+    private void updateDisplayForUpdatedPost(int updatedPostId) {
+        mRecipeShareSaveList = mRecipeShareSaveDAO.getRecipeShareSaveByUserId(mUserId);
+        if (!mRecipeShareSaveList.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (RecipeShareSave log : mRecipeShareSaveList) {
+                sb.append(log.toString());
+            }
+            mMainDisplay.setText(sb.toString());
+        } else {
+            mMainDisplay.setText(R.string.no_logs_message);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_POST_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            int updatedPostId = data.getIntExtra("updatedPostId", -1);
+            if (updatedPostId != -1) {
+                updateDisplayForUpdatedPost(updatedPostId);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshDisplay();
     }
 }

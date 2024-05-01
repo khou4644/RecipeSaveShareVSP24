@@ -84,12 +84,9 @@ public class PostActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.item1) {
             logoutUser();
             return true;
-        } else if (item.getTitle().equals(MENU_ITEM_LIKED_POSTS)) {
+        } else if (item.getItemId() == R.id.liked_posts) {
             Intent intent = new Intent(PostActivity.this, LikedPostActivity.class);
             startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.back_previous_page) {
-            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -127,6 +124,30 @@ public class PostActivity extends AppCompatActivity {
 
     private void getPrefs() {
         mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private static final int EDIT_POST_REQUEST_CODE = 1;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_POST_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            int updatedPostId = data.getIntExtra("updatedPostId", -1);
+            if (updatedPostId != -1) {
+                // Trigger an update for the specific post in the LiveData
+                LiveData<List<RecipeShareSave>> postList = mRecipeShareSaveDAO.getAllRecipeShareSave();
+                postList.observe(this, posts -> {
+                    mPostAdapter.setPosts(posts);
+                });
+            }
+        }
     }
 
 }

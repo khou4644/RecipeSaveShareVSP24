@@ -24,13 +24,16 @@ public interface RecipeShareSaveDAO {
     @Update
     void update(RecipeShareSave... recipeShareSaves);
 
+    @Update
+    void updateRecipeShareSave(RecipeShareSave recipeShareSave);
+
     @Delete
     void delete(RecipeShareSave... recipeShareSaves);
 
     @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " ORDER BY mDate desc")
     LiveData<List<RecipeShareSave>> getAllRecipeShareSave();
 
-    @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " Where mLogId = :logId ")
+    @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " WHERE mLogId = :logId")
     List<RecipeShareSave> getRecipeShareSaveById(int logId);
 
     @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " Where mLogId = :logId LIMIT 1")

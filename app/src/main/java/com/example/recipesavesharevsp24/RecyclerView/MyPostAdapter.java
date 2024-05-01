@@ -1,6 +1,7 @@
 package com.example.recipesavesharevsp24.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.recipesavesharevsp24.Activities.EditMyPostActivity;
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
@@ -48,6 +50,16 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
         return new PostViewHolder(view);
     }
 
+    public interface OnEditClickListener {
+        void onEditClick(int postId);
+    }
+
+    private OnEditClickListener mOnEditClickListener;
+
+    public void setOnEditClickListener(OnEditClickListener listener) {
+        mOnEditClickListener = listener;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         RecipeShareSave post = mPostList.get(position);
@@ -63,24 +75,24 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
         //updateLikeDislikeCounts(holder, post);
 
         // Set the initial state of the like button
-        holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
-
-        holder.likeButton.setOnClickListener(v -> {
-            if (interactionType[0] == 1) {
-                // User already liked the post, so remove the like
-                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
-                interactionType[0] = 0;
-                holder.likeButton.setSelected(false);
-            } else {
-                // User hasn't liked the post yet or previously disliked it, so add a like
-                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), 1);
-                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
-                interactionType[0] = 1;
-                holder.likeButton.setSelected(true);
-            }
-            //updateLikeDislikeCounts(holder, post);
-            holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
-        });
+//        holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
+//
+//        holder.likeButton.setOnClickListener(v -> {
+//            if (interactionType[0] == 1) {
+//                // User already liked the post, so remove the like
+//                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
+//                interactionType[0] = 0;
+//                holder.likeButton.setSelected(false);
+//            } else {
+//                // User hasn't liked the post yet or previously disliked it, so add a like
+//                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), 1);
+//                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
+//                interactionType[0] = 1;
+//                holder.likeButton.setSelected(true);
+//            }
+//            //updateLikeDislikeCounts(holder, post);
+//            holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
+//        });
 
         if (holder.deleteButton != null) {
             holder.deleteButton.setOnClickListener(v -> {
@@ -103,7 +115,22 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, mPostList.size());
         });
+
+        holder.editButton.setOnClickListener(v -> {
+            // Start the EditMyPostActivity and pass the post data
+            Intent intent = new Intent(mContext, EditMyPostActivity.class);
+            intent.putExtra("postId", post.getLogId());
+            mContext.startActivity(intent);
+        });
+
+        holder.editButton.setOnClickListener(v -> {
+            if (mOnEditClickListener != null) {
+                mOnEditClickListener.onEditClick(post.getLogId());
+            }
+        });
     }
+
+
 
 //    private void updateLikeDislikeCounts(PostViewHolder holder, RecipeShareSave post) {
 //        int likeCount = mRecipeShareSaveDAO.getLikeCount(post.getLogId());
@@ -133,13 +160,20 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
         Button deleteButton;
         TextView likeCountTextView;
         TextView postTextView;
+        Button editButton;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            likeButton = itemView.findViewById(R.id.likeButton);
+            likeButton = itemView.findViewById(R.id.likeButton); // Initialize likeButton
             deleteButton = itemView.findViewById(R.id.deleteButton);
             likeCountTextView = itemView.findViewById(R.id.likeCountTextView);
             postTextView = itemView.findViewById(R.id.postTextView);
+            editButton = itemView.findViewById(R.id.editButton);
+
+            // Check if likeButton is null after initialization
+            if (likeButton == null) {
+                // Handle the case when likeButton is null (e.g., remove it from the layout)
+            }
         }
     }
 }

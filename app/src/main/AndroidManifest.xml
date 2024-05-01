@@ -44,6 +44,11 @@
             android:parentActivityName=".Activities.LandingPage"
             android:exported="false" />
 
+        <activity
+            android:name=".Activities.EditMyPostActivity"
+            android:parentActivityName=".Activities.MyPostActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
