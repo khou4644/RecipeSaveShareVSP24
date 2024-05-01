@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
@@ -62,8 +63,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         updateLikeDislikeCounts(holder, post);
 
         // Set the initial state of the like and dislike buttons
-        holder.likeButton.setSelected(interactionType[0] == 1);
-        holder.dislikeButton.setSelected(interactionType[0] == -1);
+        holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
+        holder.dislikeButton.setBackgroundColor(interactionType[0] == -1 ? ContextCompat.getColor(mContext, R.color.disliked_color) : ContextCompat.getColor(mContext, R.color.default_color));
 
         holder.likeButton.setOnClickListener(v -> {
             if (interactionType[0] == 1) {
@@ -84,8 +85,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     holder.dislikeButton.setSelected(false);
                 }
             }
-
             updateLikeDislikeCounts(holder, post);
+
+            // Update the button colors
+            holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
+            holder.dislikeButton.setBackgroundColor(ContextCompat.getColor(mContext, R.color.default_color));
         });
 
         holder.dislikeButton.setOnClickListener(v -> {
@@ -109,6 +113,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
 
             updateLikeDislikeCounts(holder, post);
+            // Update the button colors
+            holder.likeButton.setBackgroundColor(ContextCompat.getColor(mContext, R.color.default_color));
+            holder.dislikeButton.setBackgroundColor(interactionType[0] == -1 ? ContextCompat.getColor(mContext, R.color.disliked_color) : ContextCompat.getColor(mContext, R.color.default_color));
         });
     }
 

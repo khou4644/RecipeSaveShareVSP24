@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
@@ -61,8 +62,8 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
         // Set the initial like and dislike count texts
         //updateLikeDislikeCounts(holder, post);
 
-        // Set the initial state of the like and dislike buttons
-        holder.likeButton.setSelected(interactionType[0] == 1);
+        // Set the initial state of the like button
+        holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
 
         holder.likeButton.setOnClickListener(v -> {
             if (interactionType[0] == 1) {
@@ -77,8 +78,8 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
                 interactionType[0] = 1;
                 holder.likeButton.setSelected(true);
             }
-
             //updateLikeDislikeCounts(holder, post);
+            holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
         });
 
         if (holder.deleteButton != null) {
