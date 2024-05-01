@@ -46,6 +46,8 @@ public class LandingPage extends AppCompatActivity {
 
     private Button mViewPostsButton;
 
+    private Button mViewMyPostsButton;
+
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
 
     private List<RecipeShareSave> mRecipeShareSaveList;
@@ -91,6 +93,12 @@ public class LandingPage extends AppCompatActivity {
             Intent intent = new Intent(LandingPage.this, PostActivity.class);
             startActivity(intent);
         });
+        mViewMyPostsButton = findViewById(R.id.viewMyPostsButton);
+        mViewMyPostsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingPage.this, MyPostActivity.class);
+            startActivity(intent);
+        });
+
         mMainDisplay.setMovementMethod(new ScrollingMovementMethod());
         mIngredients.setMovementMethod(new ScrollingMovementMethod());
 

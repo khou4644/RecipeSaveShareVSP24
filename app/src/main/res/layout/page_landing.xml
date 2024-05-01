@@ -95,6 +95,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/view_user_posts"
+            app:layout_constraintBottom_toTopOf="@+id/viewMyPostsButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/viewMyPostsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_my_posts"
             app:layout_constraintBottom_toTopOf="@+id/mainSubmitButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

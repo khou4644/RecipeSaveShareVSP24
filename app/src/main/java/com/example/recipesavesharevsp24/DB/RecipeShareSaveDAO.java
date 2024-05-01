@@ -74,4 +74,7 @@ public interface RecipeShareSaveDAO {
 
     @Query("SELECT COUNT(*) FROM post_interactions WHERE post_id = :postId AND interaction_type = -1")
     int getDislikeCount(int postId);
+
+    @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " WHERE mUserId = :userId ORDER BY mDate DESC")
+    List<RecipeShareSave> getPostsByUserId(int userId);
 }

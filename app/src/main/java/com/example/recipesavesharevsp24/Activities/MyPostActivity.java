@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -19,19 +18,21 @@ import androidx.room.Room;
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.R;
+import com.example.recipesavesharevsp24.RecyclerView.MyPostAdapter;
 import com.example.recipesavesharevsp24.RecyclerView.PostAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostActivity extends AppCompatActivity {
+public class MyPostActivity extends AppCompatActivity {
 
     private static final String MENU_ITEM_LIKED_POSTS = "liked_posts";
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
 
     private RecyclerView mPostRecyclerView;
-    private PostAdapter mPostAdapter;
+    //private PostAdapter mPostAdapter;
+    private MyPostAdapter mMyPostAdapter;
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
 
     private SharedPreferences mPreferences = null;
@@ -41,7 +42,7 @@ public class PostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_mypost);
         getPrefs();
         mRecipeShareSaveDAO = Room.databaseBuilder(this, AppDataBase.class, AppDataBase.DATABASE_NAME)
                 .allowMainThreadQueries()
@@ -53,15 +54,23 @@ public class PostActivity extends AppCompatActivity {
 
         int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
         mUser = mRecipeShareSaveDAO.getUserByUserId(currentUserId);
-        mPostAdapter = new PostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
-        mPostRecyclerView.setAdapter(mPostAdapter);
 
+//        mPostAdapter = new PostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
+//        mPostRecyclerView.setAdapter(mPostAdapter);
+//
+//        List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
+//        mPostAdapter.setPosts(userPosts);
 
-        LiveData<List<RecipeShareSave>> postList = mRecipeShareSaveDAO.getAllRecipeShareSave();
-        postList.observe(this, posts -> {
-            mPostAdapter.setPosts(posts);
-        });
+        mMyPostAdapter = new MyPostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
+        mPostRecyclerView.setAdapter(mMyPostAdapter);
+
+        List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
+        mMyPostAdapter.setPosts(userPosts);
     }
+
+    // Include the rest of the methods from PostActivity, such as onCreateOptionsMenu, onPrepareOptionsMenu, onOptionsItemSelected, logoutUser, clearUserFromPref, and getPrefs
+
+    // You might also want to add a menu item or button to navigate to this activity from other activities (e.g., LandingPage)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -85,7 +94,7 @@ public class PostActivity extends AppCompatActivity {
             logoutUser();
             return true;
         } else if (item.getTitle().equals(MENU_ITEM_LIKED_POSTS)) {
-            Intent intent = new Intent(PostActivity.this, LikedPostActivity.class);
+            Intent intent = new Intent(MyPostActivity.this, LikedPostActivity.class);
             startActivity(intent);
             return true;
         } else if (item.getItemId() == R.id.back_previous_page) {
@@ -103,7 +112,7 @@ public class PostActivity extends AppCompatActivity {
         alertBuilder.setPositiveButton(getString(R.string.yes),
                 (dialog, which) -> {
 //                    clearUserFromIntent();
-                    Intent intent = new Intent(PostActivity.this, MainActivity.class);
+                    Intent intent = new Intent(MyPostActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
