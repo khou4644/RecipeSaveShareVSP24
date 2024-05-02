@@ -23,6 +23,6 @@
     <string name="like">Like</string>
     <string name="liked_posts">Liked Posts</string>
     <string name="dislike">Dislike</string>
-    <string name="back_to_previous_page">Back to previous page</string>
+    <string name="back_to_previous_page">Back to Landing Page</string>
     <string name="view_my_posts">View My Posts</string>
 </resources>
