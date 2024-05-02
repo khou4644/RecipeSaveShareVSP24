@@ -51,7 +51,8 @@ public class MyPostActivity extends AppCompatActivity {
 
         if (requestCode == EDIT_POST_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             int updatedPostId = data.getIntExtra("updatedPostId", -1);
-            if (updatedPostId != -1) {
+            int clonedPostId = data.getIntExtra("clonedPostId", -1);
+            if (updatedPostId != -1 || clonedPostId != -1) {
                 // Refresh the posts list
                 int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
                 List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
@@ -102,10 +103,17 @@ public class MyPostActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == RESULT_OK) {
-                            // Refresh the posts list
-                            int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
-                            List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
-                            mMyPostAdapter.setPosts(userPosts);
+                            Intent data = result.getData();
+                            if (data != null) {
+                                int updatedPostId = data.getIntExtra("updatedPostId", -1);
+                                int clonedPostId = data.getIntExtra("clonedPostId", -1);
+                                if (updatedPostId != -1 || clonedPostId != -1) {
+                                    // Refresh the posts list
+                                    int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
+                                    List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
+                                    mMyPostAdapter.setPosts(userPosts);
+                                }
+                            }
                         }
                     }
                 });
