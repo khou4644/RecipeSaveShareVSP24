@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipesavesharevsp24.Activities.EditMyPostActivity;
+import com.example.recipesavesharevsp24.Activities.EditMyPostFragment;
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
@@ -127,13 +128,21 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
             alertDialog.show();
         });
 
-
+        //EditMyPostFragment
         holder.editButton.setOnClickListener(v -> {
-            // Start the EditMyPostActivity and pass the post data
-            Intent intent = new Intent(mContext, EditMyPostActivity.class);
-            intent.putExtra("postId", post.getLogId());
-            mContext.startActivity(intent);
+            if (mOnEditClickListener != null) {
+                int postId = mPostList.get(position).getLogId();
+                mOnEditClickListener.onEditClick(postId);
+            }
         });
+
+        //EditMyPostActivity
+//        holder.editButton.setOnClickListener(v -> {
+//            // Start the EditMyPostActivity and pass the post data
+//            Intent intent = new Intent(mContext, EditMyPostActivity.class);
+//            intent.putExtra("postId", post.getLogId());
+//            mContext.startActivity(intent);
+//        });
 
         holder.editButton.setOnClickListener(v -> {
             if (mOnEditClickListener != null) {

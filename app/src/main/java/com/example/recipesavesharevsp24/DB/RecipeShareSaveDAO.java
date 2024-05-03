@@ -80,4 +80,7 @@ public interface RecipeShareSaveDAO {
 
     @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " WHERE mUserId = :userId ORDER BY mDate DESC")
     List<RecipeShareSave> getPostsByUserId(int userId);
+
+    @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " WHERE mUserId = :userId ORDER BY mDate DESC")
+    LiveData<List<RecipeShareSave>> getPostsByUserIdLiveData(int userId);
 }

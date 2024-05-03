@@ -108,9 +108,11 @@ public class LandingPage extends AppCompatActivity {
 
         mSubmit.setOnClickListener((v) -> {
             RecipeShareSave log = getValuesFromDisplay();
-            log.setUserId(mUser.getUserId());
-            submitRecipeShareSaveLog();
-            refreshDisplay();
+            if (log != null) {
+                log.setUserId(mUser.getUserId());
+                submitRecipeShareSaveLog();
+                refreshDisplay();
+            }
         });
     }
 
@@ -250,17 +252,27 @@ public class LandingPage extends AppCompatActivity {
     }
 
     private RecipeShareSave getValuesFromDisplay() {
-        String recipe= "No record found";
+        String recipe = "";
         int serves = 0;
-        String ingredients = ""; // Initialize ingredients as an empty string
+        String ingredients = "";
 
-        recipe = mRecipe.getText().toString();
-        try {
-            serves = Integer.parseInt((mServes.getText().toString()));
-        } catch (NumberFormatException e) {
-            Log.d("Serves", "Couldn't convert serves");
+        recipe = mRecipe.getText().toString().trim();
+        if (recipe.isEmpty()) {
+            Toast.makeText(this, "Recipe name cannot be empty", Toast.LENGTH_SHORT).show();
+            return null;
         }
-        ingredients = mIngredients.getText().toString(); // Get the ingredients from the EditText
+
+        String servesInput = mServes.getText().toString().trim();
+        if (!servesInput.isEmpty()) {
+            try {
+                serves = Integer.parseInt(servesInput);
+            } catch (NumberFormatException e) {
+                Log.d("Serves", "Couldn't convert serves");
+                // Handle the case where the input is not a valid integer
+                serves = 0; // Set serves to 0 if the input is invalid
+            }
+        }
+        ingredients = mIngredients.getText().toString();
         RecipeShareSave log = new RecipeShareSave(recipe, serves, ingredients, mUserId);
         return log;
     }

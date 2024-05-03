@@ -25,4 +25,6 @@
     <string name="dislike">Dislike</string>
     <string name="back_to_previous_page">Back to Landing Page</string>
     <string name="view_my_posts">View My Posts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
