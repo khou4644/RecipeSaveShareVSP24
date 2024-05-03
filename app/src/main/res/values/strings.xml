@@ -18,11 +18,12 @@
     <string name="mainlogin">Login</string>
     <string name="recipesharesave_v_sp24">Welcome To RecipeShareSave V SP24</string>
     <string name="please_create_new_account_details_below">Please create new account details below :)</string>
-    <string name="super_top_secret_admin_button">Super Top Secret Admin Button</string>
+    <string name="super_top_secret_admin_button">Admin Menu</string>
     <string name="view_user_posts">View All User Posts</string>
     <string name="like">Like</string>
     <string name="liked_posts">Liked Posts</string>
     <string name="dislike">Dislike</string>
     <string name="back_to_previous_page">Back to Landing Page</string>
     <string name="view_my_posts">View My Posts</string>
+    <string name="ban_user">Ban User</string>
 </resources>

@@ -23,7 +23,7 @@ import com.example.recipesavesharevsp24.R;
 
 import java.util.List;
 
-public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHolder> {
+public class                                    MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHolder> {
 
     private List<RecipeShareSave> mPostList;
     private RecipeShareSaveDAO mRecipeShareSaveDAO;

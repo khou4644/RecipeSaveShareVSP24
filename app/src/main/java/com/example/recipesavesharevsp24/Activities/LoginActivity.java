@@ -52,13 +52,13 @@ public class LoginActivity extends AppCompatActivity {
 
         if (existingDefaultUser == null) {
             // Create the default user if it doesn't exist
-            User defaultUser = new User("testuser1", "testuser1", false);
+            User defaultUser = new User("testuser1", "testuser1", false, false);
             mRecipeShareSaveDAO.insert(defaultUser);
         }
 
         if (existingDefaultAdmin == null) {
             // Create the default admin if it doesn't exist
-            User defaultAdmin = new User("admin2", "admin2", true);
+            User defaultAdmin = new User( "admin2", "admin2", true, false);
             mRecipeShareSaveDAO.insert(defaultAdmin);
         }
     }
@@ -110,7 +110,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean checkForUserInDatabase() {
         mUser = mRecipeShareSaveDAO.getUserByUsername(mUsername);
-        return mUser != null;
+        if (mUser != null) {
+            // Check if the user is banned
+            if (mUser.isMisBanned()) {
+                Toast.makeText(LoginActivity.this, "This user has been banned", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     private void getDatabase(){

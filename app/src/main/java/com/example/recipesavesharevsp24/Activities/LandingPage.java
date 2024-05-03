@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 
@@ -59,6 +60,8 @@ public class LandingPage extends AppCompatActivity {
     private SharedPreferences mPreferences = null;
     private User mUser;
 
+    private LiveData<User> userLiveData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,18 +74,20 @@ public class LandingPage extends AppCompatActivity {
         getDataBase();
 
         mAdminButton = findViewById(R.id.adminButton);
-        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
-        if (mUserId != -1) {
-            loginUser(mUserId);
-            checkAdminUser();
-        } else {
-            // Handle the case when no user ID is found in the intent
-            // For example, you can redirect to the login screen
-            Intent intent = LoginActivity.intentFactory(this);
-            startActivity(intent);
-            finish();
-            return;
-        }
+        handleUserData();
+//        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
+//        if (mUserId != -1) {
+//            loginUser(mUserId);
+//            checkAdminUser();
+//        }
+//        else {
+//            // Handle the case when no user ID is found in the intent
+//            // For example, you can redirect to the login screen
+//            Intent intent = LoginActivity.intentFactory(this);
+//            startActivity(intent);
+//            finish();
+//            return;
+//        }
 
         mMainDisplay = binding.mainRecipeShareSaveDisplay;
         mRecipe = binding.mainRecipeEditText;
@@ -114,6 +119,36 @@ public class LandingPage extends AppCompatActivity {
         });
     }
 
+    private void handleUserData() {
+        int userId = getIntent().getIntExtra(USER_ID_KEY, -1);
+        if (userId != -1) {
+            RecipeShareSaveDAO userDao = AppDataBase.getInstance(this).RecipeShareSaveDAO();
+            userLiveData = userDao.getUserLiveData(userId);
+            observeUserData();
+        } else {
+            // Handle the case when no user ID is found in the intent
+            // For example, you can redirect to the login screen
+            Intent intent = LoginActivity.intentFactory(this);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void observeUserData() {
+        userLiveData.observe(this, user -> {
+            if (user != null) {
+                mUser = user;
+                checkAdminUser();
+                refreshDisplay();
+            } else {
+                // Handle the case when the user is not found
+                Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
+                Intent intent = LoginActivity.intentFactory(this);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
     private void loginUser(int userId) {
         mUser = mRecipeShareSaveDAO.getUserByUserId(userId);
         if (mUser == null) {
@@ -225,6 +260,11 @@ public class LandingPage extends AppCompatActivity {
     private void checkAdminUser() {
         if (mUser != null && mRecipeShareSaveDAO.isUserAdmin(mUser.getUserId())) {
             mAdminButton.setVisibility(View.VISIBLE);
+            mAdminButton.setOnClickListener(v -> {
+                Intent intent = new Intent(LandingPage.this, AdminMenuActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            });
         } else {
             mAdminButton.setVisibility(View.INVISIBLE);
         }
