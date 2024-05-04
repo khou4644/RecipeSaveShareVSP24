@@ -7,7 +7,7 @@
 
     <EditText
         android:id="@+id/editTextRecipe"
-        android:layout_width="250sp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Recipe"
         android:maxLines="2"

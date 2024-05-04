@@ -23,11 +23,11 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
     private List<RecipeShareSave> mPostList;
-    private RecipeShareSaveDAO mRecipeShareSaveDAO;
+    private final RecipeShareSaveDAO mRecipeShareSaveDAO;
 
     private Context mContext;
 
-    private SharedPreferences mPreferences;
+    private final SharedPreferences mPreferences;
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
@@ -151,11 +151,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
-        Button likeButton;
-        Button dislikeButton;
-        TextView likeCountTextView;
-        TextView dislikeCountTextView;
-        TextView postTextView;
+        final Button likeButton;
+        final Button dislikeButton;
+        final TextView likeCountTextView;
+        final TextView dislikeCountTextView;
+        final TextView postTextView;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);

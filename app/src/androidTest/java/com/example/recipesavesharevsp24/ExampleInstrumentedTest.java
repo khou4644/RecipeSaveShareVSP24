@@ -1,4 +1,4 @@
-package com.DB.recipesavesharevsp24;
+package com.example.recipesavesharevsp24;
 
 import android.content.Context;
 
