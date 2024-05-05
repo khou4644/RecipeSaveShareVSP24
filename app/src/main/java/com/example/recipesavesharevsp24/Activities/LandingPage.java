@@ -1,45 +1,51 @@
 package com.example.recipesavesharevsp24.Activities;
-
-import static com.example.recipesavesharevsp24.Activities.MyPostActivity.EDIT_POST_REQUEST_CODE;
-
-import android.content.Context;
-import android.content.Intent;
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager ;
+import android.app.PendingIntent ;
+import android.content.Context ;
+import android.content.Intent ;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle ;
+import android.view.Menu ;
+import android.view.MenuItem ;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 import org.jetbrains.annotations.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.room.Room;
-
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.R;
-
-
 import java.util.List;
 
 public class LandingPage extends AppCompatActivity {
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
-
     private static final int REQUEST_CODE_NEW_USERNAME = 1; //default request code to update username on options menu(top right)
+
 
     private Button mAdminButton;
     private Button mViewPostsButton;
     private Button mViewMyPostsButton;
     private Button mCreateNewPostButton;
+    private Button mNotificationButton;
+
+    private static final String CHANNEL_ID = "TEST_notification_channel";
+
     private Button mNewUsernameButton;
     private Button mNewPasswordButton;
+
 
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
 
@@ -53,12 +59,22 @@ public class LandingPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_landing);
 
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(ContextCompat.checkSelfPermission(LandingPage.this,
+                    android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(LandingPage.this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+
         getPrefs();
 
         getDataBase();
 
         mAdminButton = findViewById(R.id.adminButton);
         mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
+
         if (mUserId != -1) {
             loginUser(mUserId);
             checkAdminUser();
@@ -71,6 +87,10 @@ public class LandingPage extends AppCompatActivity {
             return;
         }
 
+        mNotificationButton = findViewById(R.id.notificationButton);
+        mNotificationButton.setOnClickListener(v -> {
+            makeNotifications();
+        });
         mViewPostsButton = findViewById(R.id.viewPostsButton);
         mViewPostsButton.setOnClickListener(v -> {
             Intent intent = new Intent(LandingPage.this, PostActivity.class);
@@ -91,6 +111,7 @@ public class LandingPage extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         mNewUsernameButton = findViewById(R.id.NewUsernameButton);
         mNewUsernameButton.setOnClickListener(v -> {
             Intent intent = new Intent(LandingPage.this, NewUsernameActivity.class);
@@ -105,6 +126,46 @@ public class LandingPage extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    public void makeNotifications() {
+        String channelID = "CHANNEL_ID_NOTIFICATION";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelID);
+        builder.setSmallIcon(R.drawable.food_notification)
+                .setContentTitle("PLEASE SEND ME RECIPES TO COOK!")
+                .setContentText("CREATE NEW RECIPES NOW!")
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(LandingPage.this, CreatePostActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.putExtra("data", "HURRY I'M HUNGRY COOK IT UP!");
+        intent.putExtra(USER_ID_KEY, mUserId);
+
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                0, intent, PendingIntent.FLAG_MUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel =
+                    notificationManager.getNotificationChannel(channelID);
+            if (notificationChannel == null) {
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(channelID,
+                        "DescTest", importance);
+                notificationChannel.setLightColor(Color.GREEN);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+
+        notificationManager.notify(0, builder.build());
+    }
+
+
+
 
     private void loginUser(int userId) {
         mUser = mRecipeShareSaveDAO.getUserByUserId(userId);
@@ -172,16 +233,23 @@ public class LandingPage extends AppCompatActivity {
 
     private void checkAdminUser() {
         if (mUser != null && mRecipeShareSaveDAO.isUserAdmin(mUser.getUserId())) {
-            mAdminButton.setVisibility(View.VISIBLE);
-            mAdminButton.setOnClickListener(v -> {
-                Intent intent = new Intent(LandingPage.this, AdminMenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            });
-        } else {
-            mAdminButton.setVisibility(View.INVISIBLE);
+            if (mAdminButton != null) {
+                mAdminButton.setVisibility(View.VISIBLE);
+                mAdminButton.setOnClickListener(v -> {
+                    Intent intent = new Intent(LandingPage.this, AdminMenuActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(USER_ID_KEY, mUserId);
+                    startActivity(intent);
+                });
+            }
+            } else {
+            if (mAdminButton != null) {
+                mAdminButton.setVisibility(View.INVISIBLE);
+            }
+
         }
     }
+
     private void clearUserFromIntent(){
         getIntent().putExtra(USER_ID_KEY, -1);
     }

@@ -33,6 +33,8 @@ public class CreatePostActivity extends AppCompatActivity {
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
     private ActivityCreatePostBinding binding;
 
+    private TextView cookTextView;
+
     private TextView mMainDisplay;
     private EditText mRecipe;
     private EditText mServes;
@@ -46,13 +48,25 @@ public class CreatePostActivity extends AppCompatActivity {
     private User mUser;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_create_post);
 
         getPrefs();
         getDataBase();
+
+
+        mUserId = getIntent().getIntExtra(USER_ID_KEY, mUserId);
+        mUser = mRecipeShareSaveDAO.getUserByUserId(mUserId);
+//        cookTextView = findViewById(R.id.CookingTime);
+//        String data = getIntent().getStringExtra("data");
+//        cookTextView.setText(data);
 
 
         mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);

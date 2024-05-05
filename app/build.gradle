@@ -54,7 +54,7 @@ dependencies {
 
     // Adding the room DB
     def room_version = "2.6.1"
-
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'androidx.databinding:databinding-runtime:8.3.2'
     annotationProcessor "androidx.room:room-compiler:$room_version"
