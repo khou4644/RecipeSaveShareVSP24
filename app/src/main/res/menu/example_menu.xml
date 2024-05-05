@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/item1"
-        android:title="User"
-        app:showAsAction="always" />
+        android:title="@string/user"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/liked_posts"
         android:title="@string/liked_posts"

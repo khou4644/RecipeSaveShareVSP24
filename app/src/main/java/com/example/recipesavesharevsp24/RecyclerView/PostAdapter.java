@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
@@ -24,11 +23,12 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
     private List<RecipeShareSave> mPostList;
-    private RecipeShareSaveDAO mRecipeShareSaveDAO;
+    private final RecipeShareSaveDAO mRecipeShareSaveDAO;
 
     private Context mContext;
+    private RecipeShareSave mSelectedPost;
 
-    private SharedPreferences mPreferences;
+    private final SharedPreferences mPreferences;
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
@@ -55,9 +55,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         User user = mRecipeShareSaveDAO.getUserByUserId(post.getUserId());
         String username = user != null ? user.getUserName() : "Unknown User";
         holder.postTextView.setText("Username: " + username + "\n" + post);
-
-        // Show or hide the "Reported" text based on the post's reported status
-        holder.reportedTextView.setVisibility(post.isReported() ? View.VISIBLE : View.GONE);
 
         // Get the current user's interaction with the post
         PostInteraction postInteraction = mRecipeShareSaveDAO.getPostInteractionByUserIdAndPostId(getCurrentUserId(), post.getLogId());
@@ -129,6 +126,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
             holder.dislikeButton.setBackgroundColor(interactionType[0] == -1 ? ContextCompat.getColor(mContext, R.color.disliked_color) : ContextCompat.getColor(mContext, R.color.default_color));
         });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            mSelectedPost = post;
+            return false;
+        });
     }
 
     private void updateLikeDislikeCounts(PostViewHolder holder, RecipeShareSave post) {
@@ -136,6 +138,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         int dislikeCount = mRecipeShareSaveDAO.getDislikeCount(post.getLogId());
         holder.likeCountTextView.setText(String.valueOf(likeCount));
         holder.dislikeCountTextView.setText(String.valueOf(dislikeCount));
+    }
+
+    public RecipeShareSave getSelectedPost() {
+        return mSelectedPost;
     }
 
     private int getCurrentUserId() {
@@ -155,12 +161,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
-        Button likeButton;
-        Button dislikeButton;
-        TextView likeCountTextView;
-        TextView dislikeCountTextView;
-        TextView postTextView;
-        TextView reportedTextView;
+        final Button likeButton;
+        final Button dislikeButton;
+        final TextView likeCountTextView;
+        final TextView dislikeCountTextView;
+        final TextView postTextView;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -169,7 +174,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             likeCountTextView = itemView.findViewById(R.id.likeCountTextView);
             dislikeCountTextView = itemView.findViewById(R.id.dislikeCountTextView);
             postTextView = itemView.findViewById(R.id.postTextView);
-            reportedTextView = itemView.findViewById(R.id.reportedTextView);
         }
     }
 }

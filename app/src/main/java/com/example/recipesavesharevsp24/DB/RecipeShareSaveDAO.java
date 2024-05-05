@@ -81,13 +81,12 @@ public interface RecipeShareSaveDAO {
     @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " WHERE mUserId = :userId ORDER BY mDate DESC")
     List<RecipeShareSave> getPostsByUserId(int userId);
 
-    @Query("UPDATE " + AppDataBase.USER_TABLE + " SET misBanned = 1 WHERE mUserId = :userId")
-    void banUser(int userId);
+    @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " WHERE mUserId = :userId ORDER BY mDate DESC")
+    LiveData<List<RecipeShareSave>> getPostsByUserIdLiveData(int userId);
 
-    @Query("SELECT * FROM "+ AppDataBase.USER_TABLE + " WHERE mUserId = :userId")
-    LiveData<User> getUserLiveData(int userId);
+    @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " WHERE mLogId IN (SELECT post_id FROM post_interactions WHERE user_id = :userId AND interaction_type = 1)")
+    List<RecipeShareSave> getLikedPostsByUserId(int userId);
 
-    @Query("UPDATE " + AppDataBase.RECIPESHARESAVE_TABLE + " SET isReported = :reported WHERE mLogId = :postId")
-    void updateReportedStatus(int postId, boolean reported);
-
+    @Query("DELETE FROM post_interactions WHERE user_id = :userId AND post_id = :postId")
+    void removeLike(int userId, int postId);
 }

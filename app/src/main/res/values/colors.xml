@@ -10,4 +10,6 @@
     <color name="liked_color">#FF4500</color>
     <color name="disliked_color">#8B0000</color>
     <color name="default_color">#808080</color>
+    <color name="button_text_color">#000000</color>
+    <color name="button_background_color">#2196F3</color>
 </resources>

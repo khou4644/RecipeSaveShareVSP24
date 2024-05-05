@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="view_my_posts">View My Posts</string>
+    <string name="clone">Clone</string>
+    <string name="update">Update</string>
+    <string name="user">User</string>
+    <string name="recipe">Recipe</string>
+    <string name="serves">Serves</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="updateFragment">Update</string>
+    <string name="remove_like">Remove Like</string>
 </resources>
