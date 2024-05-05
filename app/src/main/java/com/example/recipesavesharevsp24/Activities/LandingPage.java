@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import org.jetbrains.annotations.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,8 @@ public class LandingPage extends AppCompatActivity {
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
+    private static final int REQUEST_CODE_NEW_USERNAME = 1; //default request code to update username on options menu(top right)
+
 
     private Button mAdminButton;
     private Button mViewPostsButton;
@@ -39,6 +42,10 @@ public class LandingPage extends AppCompatActivity {
     private Button mNotificationButton;
 
     private static final String CHANNEL_ID = "TEST_notification_channel";
+
+    private Button mNewUsernameButton;
+    private Button mNewPasswordButton;
+
 
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
 
@@ -52,6 +59,7 @@ public class LandingPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_landing);
 
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             if(ContextCompat.checkSelfPermission(LandingPage.this,
                     android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
@@ -59,7 +67,6 @@ public class LandingPage extends AppCompatActivity {
                         new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
-
 
         getPrefs();
 
@@ -105,6 +112,19 @@ public class LandingPage extends AppCompatActivity {
         });
 
 
+        mNewUsernameButton = findViewById(R.id.NewUsernameButton);
+        mNewUsernameButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingPage.this, NewUsernameActivity.class);
+            intent.putExtra(USER_ID_KEY, mUserId);
+            startActivityForResult(intent, REQUEST_CODE_NEW_USERNAME); // Used to keep update username on top right of options menu after creating new username in database
+        });
+
+        mNewPasswordButton = findViewById(R.id.NewPasswordButton);
+        mNewPasswordButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingPage.this, NewPasswordActivity.class);
+            intent.putExtra(USER_ID_KEY, mUserId);
+            startActivity(intent);
+        });
     }
 
     public void makeNotifications() {
@@ -153,7 +173,7 @@ public class LandingPage extends AppCompatActivity {
             // Check if we have any users at all
             List<User> users = mRecipeShareSaveDAO.getAllUsers();
 
-            // Retrieve the user again after creating the predefined users
+            // Retrieve the user again
             mUser = mRecipeShareSaveDAO.getUserByUserId(userId);
             if (mUser == null) {
                 // Handle the case when the user is still not found
@@ -265,5 +285,27 @@ public class LandingPage extends AppCompatActivity {
         Intent intent = new Intent(context, LandingPage.class);
         intent.putExtra(USER_ID_KEY, userId);
         return intent;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                String newUsername = data.getStringExtra("NEW_USERNAME");
+                if (newUsername != null) {
+                    // Update the mUser object with the new username
+                    mUser.setUserName(newUsername);
+                    invalidateOptionsMenu(); // Refresh the menu with the new username
+                }
+            }
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

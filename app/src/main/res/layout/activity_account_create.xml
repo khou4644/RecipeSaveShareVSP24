@@ -22,11 +22,12 @@
 
     <Button
         android:id="@+id/buttonCreateAccount"
-        android:layout_width="167dp"
+        android:layout_width="250dp"
         android:layout_height="62dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/black_han_sans"
         android:text="@string/verify_new_account"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextCreatePassword" />
@@ -47,12 +48,13 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="296dp"
-        android:layout_height="49dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/please_create_new_account_details_below"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/editTextCreateUserName"
         app:layout_constraintEnd_toEndOf="parent"
