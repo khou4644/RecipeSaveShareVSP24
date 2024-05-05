@@ -23,15 +23,22 @@
         </activity>
 
         <activity
+            android:name=".Activities.CreateAccountActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".Activities.LandingPage"
             android:exported="false" />
 
         <activity
             android:name=".Activities.LoginActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:exported="false" />
 
+
         <activity
-            android:name=".Activities.CreateAccountActivity"
+            android:name=".Activities.CreatePostActivity"
+            android:parentActivityName=".Activities.LandingPage"
             android:exported="false" />
 
         <activity

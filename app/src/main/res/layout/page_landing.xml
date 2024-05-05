@@ -5,107 +5,71 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      tools:context=".Activities.LandingPage">
-
-        <TextView
-            android:id="@+id/mainRecipeShareSaveDisplay"
-            android:layout_width="385dp"
-            android:layout_height="142dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="16dp"
-            android:fadeScrollbars="true"
-            android:scrollbars="vertical"
-            android:text="@string/app_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/mainRecipeEditText"
-            android:layout_width="270dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="4dp"
-            android:ems="10"
-            android:gravity="left"
-            android:hint="@string/mainRecipeHint"
-            android:inputType="textLongMessage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.209"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainRecipeShareSaveDisplay" />
-
-        <EditText
-            android:id="@+id/mainServesEditText"
-            android:layout_width="270dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="4dp"
-            android:ems="10"
-            android:gravity="left"
-            android:hint="@string/mainAmountHint"
-            android:inputType="numberSigned"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.209"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainRecipeEditText" />
-
-        <EditText
-            android:id="@+id/mainIngredientsEditText"
-            android:layout_width="350dp"
-            android:layout_height="130dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:gravity="left"
-            android:hint="@string/mainIngredientsHint"
-            android:inputType="textMultiLine"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.453"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainServesEditText" />
+        android:layout_height="match_parent"
+        tools:context=".Activities.LandingPage">
 
         <Button
             android:id="@+id/adminButton"
-            android:layout_width="252dp"
-            android:layout_height="42dp"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="52dp"
             android:text="@string/super_top_secret_admin_button"
-            android:textSize="11sp"
+            android:textSize="14sp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainIngredientsEditText"
+            app:layout_constraintTop_toBottomOf="@+id/UserMenu"
             tools:visibility="visible" />
-
-
-
-        <Button
-            android:id="@+id/mainSubmitButton"
-            android:layout_width="290dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="448dp"
-            android:text="@string/mainSubmitButton"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainRecipeShareSaveDisplay" />
 
         <Button
             android:id="@+id/viewPostsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="48dp"
             android:text="@string/view_user_posts"
-            app:layout_constraintBottom_toTopOf="@+id/viewMyPostsButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewMyPostsButton" />
 
         <Button
             android:id="@+id/viewMyPostsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="48dp"
+
             android:text="@string/view_my_posts"
-            app:layout_constraintBottom_toTopOf="@+id/mainSubmitButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createNewPostButton" />
+
+        <Button
+            android:id="@+id/createNewPostButton"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="48dp"
+            android:text="@string/create_new_post"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/adminButton" />
+
+        <TextView
+            android:id="@+id/UserMenu"
+            android:layout_width="180dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="68dp"
+            android:fontFamily="@font/black_han_sans"
+            android:text="User Menu"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

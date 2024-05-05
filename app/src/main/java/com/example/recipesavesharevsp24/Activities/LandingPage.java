@@ -6,14 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
-
 
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
@@ -37,31 +33,17 @@ public class LandingPage extends AppCompatActivity {
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
     private PageLandingBinding binding;
 
-    private TextView mMainDisplay;
-
-    private EditText mRecipe;
-    private EditText mServes;
-    private EditText mIngredients;
-
-    private Button mSubmit;
-
     private Button mAdminButton;
-
     private Button mViewPostsButton;
-
     private Button mViewMyPostsButton;
+    private Button mCreateNewPostButton;
 
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
-
-    private List<RecipeShareSave> mRecipeShareSaveList;
 
     private int mUserId = -1;
 
     private SharedPreferences mPreferences = null;
     private User mUser;
-
-    private LiveData<User> userLiveData;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +56,11 @@ public class LandingPage extends AppCompatActivity {
         getDataBase();
 
         mAdminButton = findViewById(R.id.adminButton);
-        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
+        mUserId = getIntent().getIntExtra(USER_ID_KEY, mUserId);
         if (mUserId != -1) {
             loginUser(mUserId);
             checkAdminUser();
-        }
-        else {
+        } else {
             // Handle the case when no user ID is found in the intent
             // For example, you can redirect to the login screen
             Intent intent = LoginActivity.intentFactory(this);
@@ -88,35 +69,24 @@ public class LandingPage extends AppCompatActivity {
             return;
         }
 
-        mMainDisplay = binding.mainRecipeShareSaveDisplay;
-        mRecipe = binding.mainRecipeEditText;
-        mServes = binding.mainServesEditText;
-        mIngredients = binding.mainIngredientsEditText;
-        mSubmit = binding.mainSubmitButton;
-
         mViewPostsButton = findViewById(R.id.viewPostsButton);
         mViewPostsButton.setOnClickListener(v -> {
             Intent intent = new Intent(LandingPage.this, PostActivity.class);
+            intent.putExtra(USER_ID_KEY, mUserId);
             startActivity(intent);
         });
         mViewMyPostsButton = findViewById(R.id.viewMyPostsButton);
         mViewMyPostsButton.setOnClickListener(v -> {
             Intent intent = new Intent(LandingPage.this, MyPostActivity.class);
+            intent.putExtra(USER_ID_KEY, mUserId);
             startActivity(intent);
         });
 
-        mMainDisplay.setMovementMethod(new ScrollingMovementMethod());
-        mIngredients.setMovementMethod(new ScrollingMovementMethod());
-
-        refreshDisplay();
-
-        mSubmit.setOnClickListener((v) -> {
-            RecipeShareSave log = getValuesFromDisplay();
-            if (log != null) {
-                log.setUserId(mUser.getUserId());
-                submitRecipeShareSaveLog();
-                refreshDisplay();
-            }
+        mCreateNewPostButton = findViewById(R.id.createNewPostButton);
+        mCreateNewPostButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingPage.this, CreatePostActivity.class);
+            intent.putExtra(USER_ID_KEY, mUserId);
+            startActivity(intent);
         });
     }
 
@@ -150,51 +120,11 @@ public class LandingPage extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    //TODO finish this
-//    private void addUserToPreference(int userId) {
-//        if (mPreferences == null) {
-//            getPrefs();
-//        }
-//        SharedPreferences.Editor editor = mPreferences.edit();
-//        editor.putInt(USER_ID_KEY, userId);
-//        editor.apply(); // or editor.commit();
-//    }
 
     private void getDataBase() {
         mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
     }
 
-//    private void checkForUser() {
-//        //do we have a  user in the intent?
-//        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
-//
-//        //Do we have a user in the preferences?
-//        if(mUserId != -1){
-//            return;
-//        }
-//
-//        if (mPreferences == null ){
-//            getPrefs();
-//        }
-//            mUserId =mPreferences.getInt(USER_ID_KEY, -1);
-//
-//
-//        if (mUserId != -1){
-//            return;
-//        }
-//
-//        //do we have any users at all?
-//        List<User> users = mRecipeShareSaveDAO.getAllUsers();
-//        if (users.size() <= 0){
-//            User defaultUser = new User("testuser1", "testuser1", false);
-//            User defaultAdmin = new User("admin2", "admin2", true);
-//            mRecipeShareSaveDAO.insert(defaultUser, defaultAdmin);
-//        }
-//
-//        Intent intent = LoginActivity.intentFactory(this);
-//        startActivity(intent);
-//
-//    }
 
     private void getPrefs() {
         mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
@@ -247,53 +177,7 @@ public class LandingPage extends AppCompatActivity {
 //        addUserToPreference(-1);
     }
 
-    private void submitRecipeShareSaveLog() {
-        String exercise = mRecipe.getText().toString();
-        int serves = Integer.parseInt(mServes.getText().toString());
-        String ingredients = mIngredients.getText().toString(); // Get the ingredients from the EditText
 
-        RecipeShareSave log = new RecipeShareSave(exercise, serves, ingredients, mUserId);
-        mRecipeShareSaveDAO.insert(log);
-    }
-
-    private RecipeShareSave getValuesFromDisplay() {
-        String recipe = "";
-        int serves = 0;
-        String ingredients = "";
-
-        recipe = mRecipe.getText().toString().trim();
-        if (recipe.isEmpty()) {
-            Toast.makeText(this, "Recipe name cannot be empty", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        String servesInput = mServes.getText().toString().trim();
-        if (!servesInput.isEmpty()) {
-            try {
-                serves = Integer.parseInt(servesInput);
-            } catch (NumberFormatException e) {
-                Log.d("Serves", "Couldn't convert serves");
-                // Handle the case where the input is not a valid integer
-                serves = 0; // Set serves to 0 if the input is invalid
-            }
-        }
-        ingredients = mIngredients.getText().toString();
-        RecipeShareSave log = new RecipeShareSave(recipe, serves, ingredients, mUserId);
-        return log;
-    }
-
-    private void refreshDisplay() {
-        mRecipeShareSaveList = mRecipeShareSaveDAO.getRecipeShareSaveByUserId(mUserId);
-        if (!mRecipeShareSaveList.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (RecipeShareSave log : mRecipeShareSaveList) {
-                sb.append(log.toString());
-            }
-            mMainDisplay.setText(sb.toString());
-        } else {
-            mMainDisplay.setText(R.string.no_logs_message);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -319,34 +203,10 @@ public class LandingPage extends AppCompatActivity {
         return intent;
     }
 
-    private void updateDisplayForUpdatedPost(int updatedPostId) {
-        mRecipeShareSaveList = mRecipeShareSaveDAO.getRecipeShareSaveByUserId(mUserId);
-        if (!mRecipeShareSaveList.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (RecipeShareSave log : mRecipeShareSaveList) {
-                sb.append(log.toString());
-            }
-            mMainDisplay.setText(sb.toString());
-        } else {
-            mMainDisplay.setText(R.string.no_logs_message);
-        }
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == EDIT_POST_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            int updatedPostId = data.getIntExtra("updatedPostId", -1);
-            if (updatedPostId != -1) {
-                updateDisplayForUpdatedPost(updatedPostId);
-            }
-        }
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refreshDisplay();
     }
 }
