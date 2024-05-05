@@ -29,13 +29,13 @@
         android:inputType="textMultiLine" />
 
     <Button
-        android:id="@+id/buttonUpdate"
+        android:id="@+id/buttonClone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/clone" />
 
     <Button
-        android:id="@+id/buttonClone"
+        android:id="@+id/buttonUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/update" />

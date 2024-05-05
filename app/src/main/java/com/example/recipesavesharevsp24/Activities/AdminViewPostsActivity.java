@@ -1,5 +1,7 @@
 package com.example.recipesavesharevsp24.Activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,9 +23,15 @@ import java.util.List;
 
 public class AdminViewPostsActivity extends AppCompatActivity {
 
+    private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
+    private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private RecyclerView mPostRecyclerView;
     private AdminViewPostAdapter mAdminViewPostAdapter;
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
+    private SharedPreferences mPreferences = null;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +53,26 @@ public class AdminViewPostsActivity extends AppCompatActivity {
         postList.observe(this, posts -> {
             mAdminViewPostAdapter.setPosts(posts);
         });
+
+        mAdminViewPostAdapter.setOnEditClickListener(postId -> {
+            openEditAnyPostFragment(postId);
+        });
+
+    }
+
+    private void openEditAnyPostFragment(int postId) {
+        EditAnyPostFragment editAnyPostFragment = EditAnyPostFragment.newInstance(postId);
+        editAnyPostFragment.show(getSupportFragmentManager(), "EditAnyPostFragment");
+    }
+
+    public void refreshPostList() {
+        List<RecipeShareSave> posts = mRecipeShareSaveDAO.getAllRecipeShareSaves();
+        mAdminViewPostAdapter.setPosts(posts);
     }
 
 
+    private void getPrefs() {
+        mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
 
 }
