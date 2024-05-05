@@ -3,7 +3,7 @@ package com.example.recipesavesharevsp24.Activities;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.example.recipesavesharevsp24.DB.AppDataBase;
-import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
+
 
 import java.util.Date;
 
@@ -21,13 +21,37 @@ public class RecipeShareSave {
 
     private int mUserId;
 
+    private boolean isReported;
 
-    public RecipeShareSave(String recipe, int serves, String ingredients, int userId) {
-        mRecipe = recipe;
-        mServes = serves;
-        mIngredients = ingredients;
+    private String reportReason;
+
+
+    // Default constructor
+    public RecipeShareSave() {
+        this.isReported = false; // Set the default value to false
+        this.reportReason = ""; // Set the default value to an empty string
+    }
+
+    // Constructor with all fields
+    public RecipeShareSave(String recipe, int serves, String ingredients, int userId, boolean isReported, String reportReason) {
+        this.mRecipe = recipe;
+        this.mServes = serves;
+        this.mIngredients = ingredients;
+        this.mUserId = userId;
         mDate = new Date();
-        mUserId = userId;
+        this.isReported = isReported;
+        this.reportReason = reportReason;
+    }
+
+    // Constructor without the isReported and reportReason fields (for backward compatibility)
+    public RecipeShareSave(String recipe, int serves, String ingredients, int userId) {
+        this.mRecipe = recipe;
+        this.mServes = serves;
+        this.mIngredients = ingredients;
+        this.mUserId = userId;
+        mDate = new Date();
+        this.isReported = false; // Set the default value to false
+        this.reportReason = ""; // Set the default value to an empty string
     }
 
     public int getUserId() {
@@ -87,6 +111,22 @@ public class RecipeShareSave {
 
     public void setDate(Date date) {
         mDate = date;
+    }
+
+    public boolean isReported() {
+        return isReported;
+    }
+
+    public void setReported(boolean reported) {
+        isReported = reported;
+    }
+
+    public String getReportReason() {
+        return reportReason;
+    }
+
+    public void setReportReason(String reportReason) {
+        this.reportReason = reportReason;
     }
 
 }

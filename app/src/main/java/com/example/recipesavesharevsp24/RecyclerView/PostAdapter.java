@@ -23,11 +23,12 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
     private List<RecipeShareSave> mPostList;
-    private RecipeShareSaveDAO mRecipeShareSaveDAO;
+    private final RecipeShareSaveDAO mRecipeShareSaveDAO;
 
     private Context mContext;
+    private RecipeShareSave mSelectedPost;
 
-    private SharedPreferences mPreferences;
+    private final SharedPreferences mPreferences;
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
@@ -59,6 +60,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         PostInteraction postInteraction = mRecipeShareSaveDAO.getPostInteractionByUserIdAndPostId(getCurrentUserId(), post.getLogId());
         final int[] interactionType = {postInteraction != null ? postInteraction.getInteractionType() : 0};
 
+        //new variable to keep track of the previous interaction type:
+        final int[] previousInteractionType = {interactionType[0]};
+
         // Set the initial like and dislike count texts
         updateLikeDislikeCounts(holder, post);
 
@@ -72,24 +76,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
                 interactionType[0] = 0;
                 holder.likeButton.setSelected(false);
-            } else {
-                // User hasn't liked the post yet or previously disliked it, so add a like
+            } else if (interactionType[0] == -1) {
+                // User previously disliked the post, so remove the dislike and add a like
+                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
                 PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), 1);
                 mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
                 interactionType[0] = 1;
                 holder.likeButton.setSelected(true);
-
-                // If the user previously disliked the post, remove the dislike
-                if (holder.dislikeButton.isSelected()) {
-                    mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
-                    holder.dislikeButton.setSelected(false);
-                }
+                holder.dislikeButton.setSelected(false);
+            } else {
+                // User hasn't liked or disliked the post yet, so add a like
+                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), 1);
+                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
+                interactionType[0] = 1;
+                holder.likeButton.setSelected(true);
             }
+
             updateLikeDislikeCounts(holder, post);
 
             // Update the button colors
             holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
-            holder.dislikeButton.setBackgroundColor(ContextCompat.getColor(mContext, R.color.default_color));
+            holder.dislikeButton.setBackgroundColor(interactionType[0] == -1 ? ContextCompat.getColor(mContext, R.color.disliked_color) : ContextCompat.getColor(mContext, R.color.default_color));
         });
 
         holder.dislikeButton.setOnClickListener(v -> {
@@ -98,24 +105,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
                 interactionType[0] = 0;
                 holder.dislikeButton.setSelected(false);
-            } else {
-                // User hasn't disliked the post yet or previously liked it, so add a dislike
+            } else if (interactionType[0] == 1) {
+                // User previously liked the post, so remove the like and add a dislike
+                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
                 PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), -1);
                 mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
                 interactionType[0] = -1;
                 holder.dislikeButton.setSelected(true);
-
-                // If the user previously liked the post, remove the like
-                if (holder.likeButton.isSelected()) {
-                    mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
-                    holder.likeButton.setSelected(false);
-                }
+                holder.likeButton.setSelected(false);
+            } else {
+                // User hasn't liked or disliked the post yet, so add a dislike
+                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), -1);
+                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
+                interactionType[0] = -1;
+                holder.dislikeButton.setSelected(true);
             }
 
             updateLikeDislikeCounts(holder, post);
             // Update the button colors
-            holder.likeButton.setBackgroundColor(ContextCompat.getColor(mContext, R.color.default_color));
+            holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
             holder.dislikeButton.setBackgroundColor(interactionType[0] == -1 ? ContextCompat.getColor(mContext, R.color.disliked_color) : ContextCompat.getColor(mContext, R.color.default_color));
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            mSelectedPost = post;
+            return false;
         });
     }
 
@@ -124,6 +138,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         int dislikeCount = mRecipeShareSaveDAO.getDislikeCount(post.getLogId());
         holder.likeCountTextView.setText(String.valueOf(likeCount));
         holder.dislikeCountTextView.setText(String.valueOf(dislikeCount));
+    }
+
+    public RecipeShareSave getSelectedPost() {
+        return mSelectedPost;
     }
 
     private int getCurrentUserId() {
@@ -143,11 +161,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
-        Button likeButton;
-        Button dislikeButton;
-        TextView likeCountTextView;
-        TextView dislikeCountTextView;
-        TextView postTextView;
+        final Button likeButton;
+        final Button dislikeButton;
+        final TextView likeCountTextView;
+        final TextView dislikeCountTextView;
+        final TextView postTextView;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);

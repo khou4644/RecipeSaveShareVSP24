@@ -1,5 +1,6 @@
 package com.example.recipesavesharevsp24.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipesavesharevsp24.Activities.EditMyPostActivity;
+import com.example.recipesavesharevsp24.Activities.EditMyPostFragment;
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
@@ -25,11 +27,11 @@ import java.util.List;
 public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHolder> {
 
     private List<RecipeShareSave> mPostList;
-    private RecipeShareSaveDAO mRecipeShareSaveDAO;
+    private final RecipeShareSaveDAO mRecipeShareSaveDAO;
 
-    private Context mContext;
+    private final Context mContext;
 
-    private SharedPreferences mPreferences;
+    private final SharedPreferences mPreferences;
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
@@ -107,21 +109,40 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
         }
 
         holder.deleteButton.setOnClickListener(v -> {
-            // Delete the post from the database
-            mRecipeShareSaveDAO.delete(post);
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Delete Post");
+            builder.setMessage("Are you sure you want to delete this post?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                // Delete the post from the database
+                mRecipeShareSaveDAO.delete(post);
 
-            // Remove the post from the list and notify the adapter
-            mPostList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, mPostList.size());
+                // Remove the post from the list and notify the adapter
+                mPostList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mPostList.size());
+            });
+            builder.setNegativeButton("No", (dialog, which) -> {
+                // Do nothing
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
 
+        //EditMyPostFragment
         holder.editButton.setOnClickListener(v -> {
-            // Start the EditMyPostActivity and pass the post data
-            Intent intent = new Intent(mContext, EditMyPostActivity.class);
-            intent.putExtra("postId", post.getLogId());
-            mContext.startActivity(intent);
+            if (mOnEditClickListener != null) {
+                int postId = mPostList.get(position).getLogId();
+                mOnEditClickListener.onEditClick(postId);
+            }
         });
+
+        //EditMyPostActivity
+//        holder.editButton.setOnClickListener(v -> {
+//            // Start the EditMyPostActivity and pass the post data
+//            Intent intent = new Intent(mContext, EditMyPostActivity.class);
+//            intent.putExtra("postId", post.getLogId());
+//            mContext.startActivity(intent);
+//        });
 
         holder.editButton.setOnClickListener(v -> {
             if (mOnEditClickListener != null) {
@@ -156,11 +177,11 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
-        Button likeButton;
-        Button deleteButton;
-        TextView likeCountTextView;
-        TextView postTextView;
-        Button editButton;
+        final Button likeButton;
+        final Button deleteButton;
+        final TextView likeCountTextView;
+        final TextView postTextView;
+        final Button editButton;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);

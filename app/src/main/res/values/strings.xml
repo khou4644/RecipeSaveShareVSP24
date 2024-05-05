@@ -2,7 +2,7 @@
     <string name="app_name">RecipeShareSave V SP24</string>
     <string name="mainRecipeHint">Enter Recipe Name</string>
     <string name="mainAmountHint">Serves how many people</string>
-    <string name="mainRepsHint">Enter Ingredients with measurements</string>
+    <string name="mainIngredientsHint">Enter Ingredients with measurements</string>
     <string name="mainSubmitButton">Submit</string>
     <string name="no_logs_message">No recipes yet, time to cook!</string>
     <string name="username">enter username</string>
@@ -18,11 +18,21 @@
     <string name="mainlogin">Login</string>
     <string name="recipesharesave_v_sp24">Welcome To RecipeShareSave V SP24</string>
     <string name="please_create_new_account_details_below">Please create new account details below :)</string>
-    <string name="super_top_secret_admin_button">Super Top Secret Admin Button</string>
+    <string name="super_top_secret_admin_button">View Admin Menu</string>
     <string name="view_user_posts">View All User Posts</string>
     <string name="like">Like</string>
     <string name="liked_posts">Liked Posts</string>
     <string name="dislike">Dislike</string>
-    <string name="back_to_previous_page">Back to previous page</string>
+    <string name="back_to_previous_page">Back to Landing Page</string>
     <string name="view_my_posts">View My Posts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="clone">Clone</string>
+    <string name="update">Update</string>
+    <string name="user">User</string>
+    <string name="recipe">Recipe</string>
+    <string name="serves">Serves</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="updateFragment">Update</string>
+    <string name="remove_like">Remove Like</string>
 </resources>

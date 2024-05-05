@@ -1,5 +1,6 @@
 package com.example.recipesavesharevsp24.Activities;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -17,10 +18,14 @@ public class User {
 
     private boolean mIsAdmin;
 
-    public User(String userName, String password, boolean isAdmin) {
-        mUserName = userName;
-        mPassword = password;
-        mIsAdmin = isAdmin;
+    private boolean misBanned;
+
+
+    public User(String mUserName, String mPassword, boolean mIsAdmin, boolean misBanned) {
+        this.mUserName = mUserName;
+        this.mPassword = mPassword;
+        this.mIsAdmin = mIsAdmin;
+        this.misBanned = misBanned;
     }
 
     public int getUserId() {
@@ -47,11 +52,20 @@ public class User {
         mPassword = password;
     }
 
-    public boolean isAdmin() {
+    public boolean getIsAdmin() {
         return mIsAdmin;
     }
 
-    public void setAdmin(boolean admin) {
-        mIsAdmin = admin;
+    public void setIsAdmin(boolean IsAdmin) {
+        mIsAdmin = IsAdmin;
     }
+
+    public boolean isMisBanned() {
+        return misBanned;
+    }
+
+    public void setMisBanned(boolean isBanned) {
+        misBanned = isBanned;
+    }
+
 }

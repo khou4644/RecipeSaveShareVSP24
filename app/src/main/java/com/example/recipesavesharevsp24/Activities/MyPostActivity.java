@@ -1,5 +1,4 @@
 package com.example.recipesavesharevsp24.Activities;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,20 +6,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.R;
 import com.example.recipesavesharevsp24.RecyclerView.MyPostAdapter;
 import com.example.recipesavesharevsp24.RecyclerView.PostAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 import androidx.activity.result.ActivityResult;
@@ -29,44 +26,24 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 public class MyPostActivity extends AppCompatActivity {
-
     private static final String MENU_ITEM_LIKED_POSTS = "liked_posts";
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
-
     private RecyclerView mPostRecyclerView;
     //private PostAdapter mPostAdapter;
     private MyPostAdapter mMyPostAdapter;
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
-
     private SharedPreferences mPreferences = null;
-
     private User mUser;
-
     public static final int EDIT_POST_REQUEST_CODE = 1;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == EDIT_POST_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            int updatedPostId = data.getIntExtra("updatedPostId", -1);
-            if (updatedPostId != -1) {
-                // Refresh the posts list
-                int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
-                List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
-                mMyPostAdapter.setPosts(userPosts);
-            }
-        }
-    }
-
     private ActivityResultLauncher<Intent> editPostLauncher;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypost);
         getPrefs();
+
+        // Uncomment the following lines to initialize mRecipeShareSaveDAO
         mRecipeShareSaveDAO = Room.databaseBuilder(this, AppDataBase.class, AppDataBase.DATABASE_NAME)
                 .allowMainThreadQueries()
                 .build()
@@ -81,61 +58,43 @@ public class MyPostActivity extends AppCompatActivity {
         mMyPostAdapter = new MyPostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
         mPostRecyclerView.setAdapter(mMyPostAdapter);
 
-        List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
-        mMyPostAdapter.setPosts(userPosts);
-
-        mMyPostAdapter.setOnEditClickListener(postId -> {
-            Intent intent = new Intent(MyPostActivity.this, EditMyPostActivity.class);
-            intent.putExtra("postId", postId);
-            editPostLauncher.launch(intent);
+        LiveData<List<RecipeShareSave>> postList = mRecipeShareSaveDAO.getPostsByUserIdLiveData(currentUserId);
+        postList.observe(this, posts -> {
+            mMyPostAdapter.setPosts(posts);
         });
 
-//        mPostAdapter = new PostAdapter(this, new ArrayList<>(), mRecipeShareSaveDAO);
-//        mPostRecyclerView.setAdapter(mPostAdapter);
-//
-//        List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
-//        mPostAdapter.setPosts(userPosts);
-
-        editPostLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == RESULT_OK) {
-                            // Refresh the posts list
-                            int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
-                            List<RecipeShareSave> userPosts = mRecipeShareSaveDAO.getPostsByUserId(currentUserId);
-                            mMyPostAdapter.setPosts(userPosts);
-                        }
-                    }
-                });
-
+        // EditMyPostFragment
+        mMyPostAdapter.setOnEditClickListener(postId -> {
+            showEditFragment(postId);
+        });
     }
 
-    // Include the rest of the methods from PostActivity, such as onCreateOptionsMenu, onPrepareOptionsMenu, onOptionsItemSelected, logoutUser, clearUserFromPref, and getPrefs
+    private void showEditFragment(int postId) {
+        EditMyPostFragment fragment = EditMyPostFragment.newInstance(postId);
+        fragment.setOnDialogDismissListener(this::refreshPostList);
+        fragment.show(getSupportFragmentManager(), "EditMyPostFragment");
+    }
 
-    // You might also want to add a menu item or button to navigate to this activity from other activities (e.g., LandingPage)
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.example_menu, menu);
         return true;
     }
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mUser != null){
             MenuItem item = menu.findItem(R.id.item1);
             item.setTitle(mUser.getUserName());
-
         }
         return super.onPrepareOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.item1) {
-            logoutUser();
+        if (item.getItemId() == R.id.liked_posts) {
+            Intent intent = new Intent(this, LikedPostActivity.class);
+            startActivity(intent);
             return true;
         } else if (item.getItemId() == R.id.liked_posts) {
             Intent intent = new Intent(MyPostActivity.this, LikedPostActivity.class);
@@ -144,12 +103,9 @@ public class MyPostActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     private void logoutUser(){
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-
         alertBuilder.setMessage(R.string.logout);
-
         alertBuilder.setPositiveButton(getString(R.string.yes),
                 (dialog, which) -> {
 //                    clearUserFromIntent();
@@ -163,7 +119,6 @@ public class MyPostActivity extends AppCompatActivity {
                 });
         alertBuilder.setNegativeButton(getString(R.string.no),
                 (dialog, which) -> {
-
                 });
         alertBuilder.create().show();
 
@@ -173,6 +128,19 @@ public class MyPostActivity extends AppCompatActivity {
         editor.remove(USER_ID_KEY);
         editor.apply();
 //        addUserToPreference(-1);
+    }
+
+    void refreshPostList() {
+        int currentUserId = mPreferences.getInt(USER_ID_KEY, -1);
+        LiveData<List<RecipeShareSave>> postList = mRecipeShareSaveDAO.getPostsByUserIdLiveData(currentUserId);
+        postList.observe(this, posts -> {
+            mMyPostAdapter.setPosts(posts);
+        });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshPostList();
     }
 
     private void getPrefs() {
