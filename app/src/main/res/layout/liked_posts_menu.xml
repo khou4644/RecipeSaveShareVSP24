@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Button
         android:id="@+id/remove_like"
-        android:title="Remove Like"
+        android:title="@string/remove_like"
         app:showAsAction="never" />
 </menu>

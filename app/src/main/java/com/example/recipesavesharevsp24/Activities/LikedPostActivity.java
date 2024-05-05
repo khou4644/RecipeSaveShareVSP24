@@ -1,5 +1,6 @@
 package com.example.recipesavesharevsp24.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -55,6 +56,7 @@ public class LikedPostActivity extends AppCompatActivity {
         mPostAdapter.setPosts(likedPosts);
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.layout.liked_posts_menu, menu);

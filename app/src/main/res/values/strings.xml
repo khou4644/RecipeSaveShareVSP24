@@ -34,4 +34,5 @@
     <string name="serves">Serves</string>
     <string name="ingredients">Ingredients</string>
     <string name="updateFragment">Update</string>
+    <string name="remove_like">Remove Like</string>
 </resources>
