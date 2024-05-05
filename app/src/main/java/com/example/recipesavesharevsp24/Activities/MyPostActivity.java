@@ -137,6 +137,7 @@ public class MyPostActivity extends AppCompatActivity {
             mMyPostAdapter.setPosts(posts);
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();

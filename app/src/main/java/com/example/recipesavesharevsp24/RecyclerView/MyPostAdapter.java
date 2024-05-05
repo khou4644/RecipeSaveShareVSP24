@@ -13,9 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.recipesavesharevsp24.Activities.EditMyPostActivity;
-import com.example.recipesavesharevsp24.Activities.EditMyPostFragment;
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
