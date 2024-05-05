@@ -299,6 +299,8 @@ public class LandingPage extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.example_menu, menu);
+        MenuItem likedPostsItem = menu.findItem(R.id.liked_posts);
+        likedPostsItem.setVisible(false);
         return true;
     }
 
@@ -309,7 +311,6 @@ public class LandingPage extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     public static Intent intentFactory(Context context, int userId){
