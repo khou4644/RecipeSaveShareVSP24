@@ -71,4 +71,11 @@ public class LikedPostActivity extends AppCompatActivity {
     private void getPrefs() {
         mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 }
