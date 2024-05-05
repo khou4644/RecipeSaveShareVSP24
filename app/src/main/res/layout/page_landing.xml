@@ -10,10 +10,12 @@
 
         <Button
             android:id="@+id/notificationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="112dp"
-            android:text="Send Broadcast"
+            android:layout_width="318dp"
+            android:layout_height="58dp"
+            android:fontFamily="@font/black_han_sans"
+            android:text="im starving..."
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

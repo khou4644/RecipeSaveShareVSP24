@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey;
 
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 
+import java.io.Serializable;
+
 @Entity(tableName = AppDataBase.USER_TABLE)
 public class User {
 

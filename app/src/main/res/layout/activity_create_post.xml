@@ -77,6 +77,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/createPostIngredientsEditText" />
 
+        <TextView
+            android:id="@+id/CookingTime"
+            android:layout_width="350dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/black_han_sans"
+            android:text="TIME TO START COOKING!!!"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="28sp"
+            app:layout_constraintBottom_toTopOf="@+id/createPostSubmitButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createPostIngredientsEditText" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
