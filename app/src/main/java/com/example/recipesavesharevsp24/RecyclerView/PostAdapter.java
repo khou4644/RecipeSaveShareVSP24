@@ -26,6 +26,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private final RecipeShareSaveDAO mRecipeShareSaveDAO;
 
     private Context mContext;
+    private RecipeShareSave mSelectedPost;
 
     private final SharedPreferences mPreferences;
 
@@ -125,6 +126,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
             holder.dislikeButton.setBackgroundColor(interactionType[0] == -1 ? ContextCompat.getColor(mContext, R.color.disliked_color) : ContextCompat.getColor(mContext, R.color.default_color));
         });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            mSelectedPost = post;
+            return false;
+        });
     }
 
     private void updateLikeDislikeCounts(PostViewHolder holder, RecipeShareSave post) {
@@ -132,6 +138,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         int dislikeCount = mRecipeShareSaveDAO.getDislikeCount(post.getLogId());
         holder.likeCountTextView.setText(String.valueOf(likeCount));
         holder.dislikeCountTextView.setText(String.valueOf(dislikeCount));
+    }
+
+    public RecipeShareSave getSelectedPost() {
+        return mSelectedPost;
     }
 
     private int getCurrentUserId() {

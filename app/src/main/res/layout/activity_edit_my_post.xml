@@ -9,13 +9,13 @@
         android:id="@+id/editTextRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Recipe Name" />
+        android:hint="@string/mainRecipeHint" />
 
     <EditText
         android:id="@+id/editTextServes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Number of Servings"
+        android:hint="@string/mainAmountHint"
         android:inputType="number" />
 
     <EditText
@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top"
-        android:hint="Enter Ingredients"
+        android:hint="@string/mainIngredientsHint"
         android:inputType="textMultiLine" />
 
     <Button
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="Clone"
+        android:text="@string/clone"
         android:layout_gravity="end"/>
 
     <Button
@@ -40,6 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="Update" />
+        android:text="@string/update" />
 
 </LinearLayout>

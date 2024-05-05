@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="250dp"
+    android:layout_height="250dp"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -9,7 +9,7 @@
         android:id="@+id/editTextRecipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Recipe"
+        android:hint="@string/recipe"
         android:maxLines="2"
         android:inputType="textMultiLine" />
 
@@ -17,14 +17,14 @@
         android:id="@+id/editTextServes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Serves"
+        android:hint="@string/serves"
         android:inputType="number" />
 
     <EditText
         android:id="@+id/editTextIngredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ingredients"
+        android:hint="@string/ingredients"
         android:maxLines="4"
         android:inputType="textMultiLine" />
 
@@ -32,12 +32,12 @@
         android:id="@+id/buttonUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update" />
+        android:text="@string/clone" />
 
     <Button
         android:id="@+id/buttonClone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Clone" />
+        android:text="@string/update" />
 
 </LinearLayout>

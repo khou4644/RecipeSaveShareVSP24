@@ -91,8 +91,9 @@ public class MyPostActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.item1) {
-            logoutUser();
+        if (item.getItemId() == R.id.liked_posts) {
+            Intent intent = new Intent(this, LikedPostActivity.class);
+            startActivity(intent);
             return true;
         } else if (item.getItemId() == R.id.liked_posts) {
             Intent intent = new Intent(MyPostActivity.this, LikedPostActivity.class);

@@ -2,7 +2,7 @@
     <string name="app_name">RecipeShareSave V SP24</string>
     <string name="mainRecipeHint">Enter Recipe Name</string>
     <string name="mainAmountHint">Serves how many people</string>
-    <string name="mainRepsHint">Enter Ingredients with measurements</string>
+    <string name="mainIngredientsHint">Enter Ingredients with measurements</string>
     <string name="mainSubmitButton">Submit</string>
     <string name="no_logs_message">No recipes yet, time to cook!</string>
     <string name="username">enter username</string>
@@ -27,4 +27,11 @@
     <string name="view_my_posts">View My Posts</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="clone">Clone</string>
+    <string name="update">Update</string>
+    <string name="user">User</string>
+    <string name="recipe">Recipe</string>
+    <string name="serves">Serves</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="updateFragment">Update</string>
 </resources>
