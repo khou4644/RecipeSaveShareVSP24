@@ -70,6 +70,7 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_marginTop="112dp"
+            android:fontFamily="@font/black_han_sans"
             android:text="@string/mainSubmitButton"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
