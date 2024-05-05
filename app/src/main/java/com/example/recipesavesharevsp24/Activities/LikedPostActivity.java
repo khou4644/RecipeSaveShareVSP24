@@ -86,4 +86,10 @@ public class LikedPostActivity extends AppCompatActivity {
         builder.setNegativeButton("No", null);
         builder.show();
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 }
