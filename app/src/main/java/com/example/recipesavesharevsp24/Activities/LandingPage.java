@@ -32,6 +32,7 @@ public class LandingPage extends AppCompatActivity {
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
+    private static final String CHANNEL_ID = "TEST_notification_channel";
     private static final int REQUEST_CODE_NEW_USERNAME = 1; //default request code to update username on options menu(top right)
 
 
@@ -41,7 +42,6 @@ public class LandingPage extends AppCompatActivity {
     private Button mCreateNewPostButton;
     private Button mNotificationButton;
 
-    private static final String CHANNEL_ID = "TEST_notification_channel";
 
     private Button mNewUsernameButton;
     private Button mNewPasswordButton;
@@ -214,14 +214,11 @@ public class LandingPage extends AppCompatActivity {
 
         alertBuilder.setPositiveButton(getString(R.string.yes),
                 (dialog, which) -> {
-//                    clearUserFromIntent();
                     Intent intent = new Intent(LandingPage.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                     clearUserFromPref();
-//                    mUserId = -1;
-//                    checkForUser();
                 });
         alertBuilder.setNegativeButton(getString(R.string.no),
                 (dialog, which) -> {
@@ -250,15 +247,10 @@ public class LandingPage extends AppCompatActivity {
         }
     }
 
-    private void clearUserFromIntent(){
-        getIntent().putExtra(USER_ID_KEY, -1);
-    }
-
     private void clearUserFromPref() {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.remove(USER_ID_KEY);
         editor.apply();
-//        addUserToPreference(-1);
     }
 
 

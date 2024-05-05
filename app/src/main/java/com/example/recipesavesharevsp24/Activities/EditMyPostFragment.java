@@ -1,13 +1,11 @@
 package com.example.recipesavesharevsp24.Activities;
 
-import static android.app.Activity.RESULT_OK;
 
-import static androidx.databinding.DataBindingUtil.setContentView;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -27,7 +25,6 @@ import android.widget.Toast;
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.R;
-
 import java.util.List;
 
 ///**
@@ -64,7 +61,7 @@ public class EditMyPostFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_my_post, container, false);
-        // ...
+
         mRecipeEditText = view.findViewById(R.id.editTextRecipe);
         mServesEditText = view.findViewById(R.id.editTextServes);
         mIngredientsEditText = view.findViewById(R.id.editTextIngredients);

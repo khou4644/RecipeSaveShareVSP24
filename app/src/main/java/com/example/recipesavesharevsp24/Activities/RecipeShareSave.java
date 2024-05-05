@@ -23,24 +23,21 @@ public class RecipeShareSave {
 
     private boolean isReported;
 
-    private String reportReason;
 
 
     // Default constructor
     public RecipeShareSave() {
         this.isReported = false; // Set the default value to false
-        this.reportReason = ""; // Set the default value to an empty string
     }
 
     // Constructor with all fields
-    public RecipeShareSave(String recipe, int serves, String ingredients, int userId, boolean isReported, String reportReason) {
+    public RecipeShareSave(String recipe, int serves, String ingredients, int userId, boolean isReported) {
         this.mRecipe = recipe;
         this.mServes = serves;
         this.mIngredients = ingredients;
         this.mUserId = userId;
         mDate = new Date();
         this.isReported = isReported;
-        this.reportReason = reportReason;
     }
 
     // Constructor without the isReported and reportReason fields (for backward compatibility)
@@ -51,7 +48,6 @@ public class RecipeShareSave {
         this.mUserId = userId;
         mDate = new Date();
         this.isReported = false; // Set the default value to false
-        this.reportReason = ""; // Set the default value to an empty string
     }
 
     public int getUserId() {
@@ -121,12 +117,6 @@ public class RecipeShareSave {
         isReported = reported;
     }
 
-    public String getReportReason() {
-        return reportReason;
-    }
 
-    public void setReportReason(String reportReason) {
-        this.reportReason = reportReason;
-    }
 
 }

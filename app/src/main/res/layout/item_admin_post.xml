@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/black_han_sans"
-            android:text="Edit" />
+            android:text="@string/edit_admin" />
 
         <Button
             android:id="@+id/deleteButton"
@@ -30,14 +30,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/black_han_sans"
-            android:text="Delete" />
+            android:text="@string/delete_admin" />
 
         <Button
             android:id="@+id/reportButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/black_han_sans"
-            android:text="Report" />
+            android:text="@string/report_admin" />
 
     </LinearLayout>
 

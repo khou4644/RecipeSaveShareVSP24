@@ -25,7 +25,6 @@
     <string name="dislike">Dislike</string>
     <string name="back_to_previous_page">Back to Landing Page</string>
     <string name="view_my_posts">My Posts</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="clone">Clone</string>
     <string name="update">Update</string>
@@ -37,4 +36,30 @@
     <string name="remove_like">Remove Like</string>
     <string name="edit">Edit</string>
     <string name="create_new_post">Create New Post</string>
+    <string name="admin_menu">Admin Menu</string>
+    <string name="view_all_user_posts">View All User Posts</string>
+    <string name="view_all_users">View All Users</string>
+    <string name="time_to_start_cooking">TIME TO START COOKING!!!</string>
+    <string name="create_new_password">Create New Password</string>
+    <string name="enter_old_password">Enter Old Password</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="create_new_username">Create New Username</string>
+    <string name="enter_old_username">Enter Old Username</string>
+    <string name="enter_new_username">Enter New Username</string>
+    <string name="confirm_new_username">Confirm New Username</string>
+    <string name="edit_admin">Edit</string>
+    <string name="delete_admin">Delete</string>
+    <string name="report_admin">Report</string>
+    <string name="reported_post">REPORTED POST</string>
+    <string name="_0like">0</string>
+    <string name="_0dislike">0</string>
+    <string name="ban_user">Ban User</string>
+    <string name="delete_user">Delete User</string>
+    <string name="delete">Delete</string>
+    <string name="reported_post_my">REPORTED POST</string>
+    <string name="user_menu">User Menu</string>
+    <string name="im_starving">im starving...</string>
+    <string name="create_new_username_button">Create New Username</string>
+    <string name="create_new_password_button">Create New Password</string>
 </resources>

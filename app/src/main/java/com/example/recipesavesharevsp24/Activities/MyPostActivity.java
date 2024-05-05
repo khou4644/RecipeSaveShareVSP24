@@ -12,18 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.R;
 import com.example.recipesavesharevsp24.RecyclerView.MyPostAdapter;
-import com.example.recipesavesharevsp24.RecyclerView.PostAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+
 
 public class MyPostActivity extends AppCompatActivity {
     private static final String MENU_ITEM_LIKED_POSTS = "liked_posts";
@@ -36,18 +31,13 @@ public class MyPostActivity extends AppCompatActivity {
     private SharedPreferences mPreferences = null;
     private User mUser;
     public static final int EDIT_POST_REQUEST_CODE = 1;
-    private ActivityResultLauncher<Intent> editPostLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypost);
-        getPrefs();
 
-        // Uncomment the following lines to initialize mRecipeShareSaveDAO
-        mRecipeShareSaveDAO = Room.databaseBuilder(this, AppDataBase.class, AppDataBase.DATABASE_NAME)
-                .allowMainThreadQueries()
-                .build()
-                .RecipeShareSaveDAO();
+        getPrefs();
+        getDataBase();
 
         mPostRecyclerView = findViewById(R.id.postRecyclerView);
         mPostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -107,14 +97,13 @@ public class MyPostActivity extends AppCompatActivity {
         alertBuilder.setMessage(R.string.logout);
         alertBuilder.setPositiveButton(getString(R.string.yes),
                 (dialog, which) -> {
-//                    clearUserFromIntent();
+
                     Intent intent = new Intent(MyPostActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                     clearUserFromPref();
-//                    mUserId = -1;
-//                    checkForUser();
+
                 });
         alertBuilder.setNegativeButton(getString(R.string.no),
                 (dialog, which) -> {
@@ -126,7 +115,6 @@ public class MyPostActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.remove(USER_ID_KEY);
         editor.apply();
-//        addUserToPreference(-1);
     }
 
     void refreshPostList() {
@@ -146,6 +134,11 @@ public class MyPostActivity extends AppCompatActivity {
     private void getPrefs() {
         mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
     }
+
+    private void getDataBase() {
+        mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {

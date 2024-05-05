@@ -31,7 +31,7 @@
                 android:id="@+id/likeCountTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="@string/_0like"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -52,7 +52,7 @@
                 android:id="@+id/dislikeCountTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="@string/_0dislike"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -61,7 +61,7 @@
             android:id="@+id/reportedTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="REPORTED POST"
+            android:text="@string/reported_post"
             android:textColor="@android:color/holo_red_dark"
             android:visibility="gone" />
 

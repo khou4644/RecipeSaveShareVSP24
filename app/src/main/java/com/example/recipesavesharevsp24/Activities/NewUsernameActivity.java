@@ -1,6 +1,8 @@
 package com.example.recipesavesharevsp24.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,8 @@ import com.example.recipesavesharevsp24.R;
 
 public class NewUsernameActivity extends AppCompatActivity {
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
+    private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
+    private SharedPreferences mPreferences = null;
     private EditText mOldUsernameEditText;
     private EditText mNewUsernameEditText;
     private Button mConfirmButton;
@@ -25,12 +29,14 @@ public class NewUsernameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_username);
 
+        getPrefs();
+        getDataBase();
+
         mOldUsernameEditText = findViewById(R.id.old_username_edit_text);
         mNewUsernameEditText = findViewById(R.id.new_username_edit_text);
         mConfirmButton = findViewById(R.id.confirm_button);
 
         mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
-        mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
 
         mConfirmButton.setOnClickListener(v -> {
             String oldUsername = mOldUsernameEditText.getText().toString();
@@ -58,6 +64,16 @@ public class NewUsernameActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getDataBase() {
+        mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
+    }
+
+
+    private void getPrefs() {
+        mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
