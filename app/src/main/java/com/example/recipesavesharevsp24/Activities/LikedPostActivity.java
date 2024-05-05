@@ -93,10 +93,4 @@ public class LikedPostActivity extends AppCompatActivity {
         builder.show();
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
 }
