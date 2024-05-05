@@ -1,5 +1,5 @@
 package com.example.recipesavesharevsp24.RecyclerView;
-
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -18,30 +18,38 @@ import com.example.recipesavesharevsp24.R;
 
 import java.util.List;
 
-public class AdminViewPostAdapter extends RecyclerView.Adapter<AdminViewPostAdapter.AdminViewPostViewHolder> {
+public class AdminViewPostAdapter extends RecyclerView.Adapter<AdminViewPostAdapter.PostViewHolder> {
 
     private List<RecipeShareSave> mPostList;
-    private RecipeShareSaveDAO mRecipeShareSaveDAO;
-    private Context mContext;
+    private final RecipeShareSaveDAO mRecipeShareSaveDAO;
+    private final Context mContext;
+    private OnDeleteClickListener mOnDeleteClickListener;
+    private OnEditClickListener mOnEditClickListener;
 
     public AdminViewPostAdapter(Context context, RecipeShareSaveDAO recipeShareSaveDAO) {
         mContext = context;
         mRecipeShareSaveDAO = recipeShareSaveDAO;
+
+    }
+
+    public void setOnEditClickListener(OnEditClickListener listener) {
+        mOnEditClickListener = listener;
     }
 
     @NonNull
     @Override
-    public AdminViewPostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_admin_post, parent, false);
-        return new AdminViewPostViewHolder(view);
+        return new PostViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdminViewPostViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         RecipeShareSave post = mPostList.get(position);
         User user = mRecipeShareSaveDAO.getUserByUserId(post.getUserId());
         String username = user != null ? user.getUserName() : "Unknown User";
         holder.postTextView.setText("Username: " + username + "\n" + post);
+
         // Set the reported status text
         holder.reportedTextView.setText(post.isReported() ? "REPORTED POST" : "");
         if (post.isReported()) {
@@ -55,13 +63,48 @@ public class AdminViewPostAdapter extends RecyclerView.Adapter<AdminViewPostAdap
         // Show or hide the "Reported" text based on the post's reported status
         holder.reportedTextView.setVisibility(post.isReported() ? View.VISIBLE : View.GONE);
 
+
+        //EditAnyPostFragment
         holder.editButton.setOnClickListener(v -> {
-            // Handle edit button click
+            if (mOnEditClickListener != null) {
+                int postId = mPostList.get(position).getLogId();
+                mOnEditClickListener.onEditClick(postId);
+            }
         });
 
+        if (holder.deleteButton != null) {
+            holder.deleteButton.setOnClickListener(v -> {
+                // Delete the post from the database
+                mRecipeShareSaveDAO.delete(post);
+
+                // Remove the post from the list and notify the adapter
+                mPostList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mPostList.size());
+            });
+        }
+
         holder.deleteButton.setOnClickListener(v -> {
-            // Handle delete button click
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Delete Post");
+            builder.setMessage("Are you sure you want to delete this post?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                // Delete the post from the database
+                mRecipeShareSaveDAO.delete(post);
+
+                // Remove the post from the list and notify the adapter
+                mPostList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mPostList.size());
+            });
+            builder.setNegativeButton("No", (dialog, which) -> {
+                // Do nothing
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
+
+
 
         holder.reportButton.setOnClickListener(v -> {
             boolean currentlyReported = post.isReported();
@@ -86,15 +129,26 @@ public class AdminViewPostAdapter extends RecyclerView.Adapter<AdminViewPostAdap
         notifyDataSetChanged();
     }
 
-    static class AdminViewPostViewHolder extends RecyclerView.ViewHolder {
-        TextView postTextView;
-        Button editButton;
-        Button deleteButton;
+    public interface OnEditClickListener {
+        void onEditClick(int postId);
+    }
+
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
+        mOnDeleteClickListener = listener;
+    }
+
+    public interface OnDeleteClickListener {
+        void onDeleteClick(RecipeShareSave post);
+    }
+
+    static class PostViewHolder extends RecyclerView.ViewHolder {
+        final TextView postTextView;
+        final Button editButton;
+        final Button deleteButton;
         Button reportButton;
         TextView reportedTextView;
 
-
-        AdminViewPostViewHolder(@NonNull View itemView) {
+        PostViewHolder(@NonNull View itemView) {
             super(itemView);
             postTextView = itemView.findViewById(R.id.postTextView);
             editButton = itemView.findViewById(R.id.editButton);

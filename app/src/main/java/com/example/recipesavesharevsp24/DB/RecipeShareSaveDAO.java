@@ -98,4 +98,7 @@ public interface RecipeShareSaveDAO {
 
     @Query("UPDATE " + AppDataBase.RECIPESHARESAVE_TABLE + " SET isReported = :reported WHERE mLogId = :postId")
     void updateReportedStatus(int postId, boolean reported);
+
+    @Query("SELECT * FROM " + AppDataBase.RECIPESHARESAVE_TABLE + " ORDER BY mDate DESC")
+    List<RecipeShareSave> getAllRecipeShareSaves();
 }

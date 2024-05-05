@@ -73,28 +73,6 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
         PostInteraction postInteraction = mRecipeShareSaveDAO.getPostInteractionByUserIdAndPostId(getCurrentUserId(), post.getLogId());
         final int[] interactionType = {postInteraction != null ? postInteraction.getInteractionType() : 0};
 
-        // Set the initial like and dislike count texts
-        //updateLikeDislikeCounts(holder, post);
-
-        // Set the initial state of the like button
-//        holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
-//
-//        holder.likeButton.setOnClickListener(v -> {
-//            if (interactionType[0] == 1) {
-//                // User already liked the post, so remove the like
-//                mRecipeShareSaveDAO.deletePostInteraction(getCurrentUserId(), post.getLogId());
-//                interactionType[0] = 0;
-//                holder.likeButton.setSelected(false);
-//            } else {
-//                // User hasn't liked the post yet or previously disliked it, so add a like
-//                PostInteraction interaction = new PostInteraction(getCurrentUserId(), post.getLogId(), 1);
-//                mRecipeShareSaveDAO.insertOrUpdatePostInteraction(interaction);
-//                interactionType[0] = 1;
-//                holder.likeButton.setSelected(true);
-//            }
-//            //updateLikeDislikeCounts(holder, post);
-//            holder.likeButton.setBackgroundColor(interactionType[0] == 1 ? ContextCompat.getColor(mContext, R.color.liked_color) : ContextCompat.getColor(mContext, R.color.default_color));
-//        });
 
         if (holder.deleteButton != null) {
             holder.deleteButton.setOnClickListener(v -> {
@@ -135,14 +113,6 @@ public class MyPostAdapter extends RecyclerView.Adapter<MyPostAdapter.PostViewHo
                 mOnEditClickListener.onEditClick(postId);
             }
         });
-
-        //EditMyPostActivity
-//        holder.editButton.setOnClickListener(v -> {
-//            // Start the EditMyPostActivity and pass the post data
-//            Intent intent = new Intent(mContext, EditMyPostActivity.class);
-//            intent.putExtra("postId", post.getLogId());
-//            mContext.startActivity(intent);
-//        });
 
         holder.editButton.setOnClickListener(v -> {
             if (mOnEditClickListener != null) {
