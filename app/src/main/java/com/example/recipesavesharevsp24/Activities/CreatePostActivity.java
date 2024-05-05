@@ -64,9 +64,6 @@ public class CreatePostActivity extends AppCompatActivity {
 
         mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
         mUser = mRecipeShareSaveDAO.getUserByUserId(mUserId);
-        cookTextView = findViewById(R.id.CookingTime);
-        String data = getIntent().getStringExtra("data");
-        cookTextView.setText(data);
 
 
 
