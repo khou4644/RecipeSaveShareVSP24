@@ -16,12 +16,12 @@ import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.R;
 
 public class CreateAccountActivity extends AppCompatActivity {
+
         private EditText mUsernameEditText;
         private EditText mPasswordEditText;
         private Button mCreateAccountButton;
 
         private RecipeShareSaveDAO mRecipeShareSaveDAO;
-
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

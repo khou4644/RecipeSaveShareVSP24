@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
+
 
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
@@ -36,6 +36,8 @@ public class PostActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences = null;
 
+    private static final int EDIT_POST_REQUEST_CODE = 1;
+
     private User mUser;
 
     @Override
@@ -43,10 +45,7 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         getPrefs();
-        mRecipeShareSaveDAO = Room.databaseBuilder(this, AppDataBase.class, AppDataBase.DATABASE_NAME)
-                .allowMainThreadQueries()
-                .build()
-                .RecipeShareSaveDAO();
+        getDataBase();
 
         mPostRecyclerView = findViewById(R.id.postRecyclerView);
         mPostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -81,9 +80,8 @@ public class PostActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.liked_posts) {
-            Intent intent = new Intent(this, LikedPostActivity.class);
-            startActivity(intent);
+        if (item.getItemId() == R.id.item1) {
+            logoutUser();
             return true;
         } else if (item.getItemId() == R.id.liked_posts) {
             Intent intent = new Intent(PostActivity.this, LikedPostActivity.class);
@@ -123,6 +121,10 @@ public class PostActivity extends AppCompatActivity {
 //        addUserToPreference(-1);
     }
 
+    private void getDataBase() {
+        mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
+    }
+
     private void getPrefs() {
         mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
     }
@@ -133,7 +135,7 @@ public class PostActivity extends AppCompatActivity {
         return true;
     }
 
-    private static final int EDIT_POST_REQUEST_CODE = 1;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

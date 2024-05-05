@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
+
 
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
@@ -36,11 +35,8 @@ public class LikedPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liked_post);
 
-        mPreferences = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        mRecipeShareSaveDAO = Room.databaseBuilder(this, AppDataBase.class, AppDataBase.DATABASE_NAME)
-                .allowMainThreadQueries()
-                .build()
-                .RecipeShareSaveDAO();
+        getPrefs();
+        getDataBase();
 
         mLikedPostRecyclerView = findViewById(R.id.likedPostRecyclerView);
         mLikedPostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -62,6 +58,14 @@ public class LikedPostActivity extends AppCompatActivity {
         return true;
     }
 
+    private void getDataBase() {
+        mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
+    }
+
+
+    private void getPrefs() {
+        mPreferences = this.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
     @SuppressLint("ResourceType")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

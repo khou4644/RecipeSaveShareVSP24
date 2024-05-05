@@ -61,11 +61,14 @@ public class CreatePostActivity extends AppCompatActivity {
         getPrefs();
         getDataBase();
 
+
         mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
         mUser = mRecipeShareSaveDAO.getUserByUserId(mUserId);
-//        cookTextView = findViewById(R.id.CookingTime);
-//        String data = getIntent().getStringExtra("data");
-//        cookTextView.setText(data);
+        cookTextView = findViewById(R.id.CookingTime);
+        String data = getIntent().getStringExtra("data");
+        cookTextView.setText(data);
+
+
 
 
         mMainDisplay = binding.createPostDisplay;
@@ -91,7 +94,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void getDataBase() {
         mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
-        mUserId = getIntent().getIntExtra(USER_ID_KEY, mUserId);
+        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
     }
 
     private void getPrefs() {
@@ -103,14 +106,6 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
 
-    private void submitRecipeShareSaveLog() {
-        String exercise = mRecipe.getText().toString();
-        int serves = Integer.parseInt(mServes.getText().toString());
-        String ingredients = mIngredients.getText().toString(); // Get the ingredients from the EditText
-
-        RecipeShareSave log = new RecipeShareSave(exercise, serves, ingredients, mUserId);
-        mRecipeShareSaveDAO.insert(log);
-    }
 
     private RecipeShareSave getValuesFromDisplay() {
         String recipe = "";
@@ -134,8 +129,7 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         }
         ingredients = mIngredients.getText().toString();
-        RecipeShareSave log = new RecipeShareSave(recipe, serves, ingredients, mUserId);
-        return log;
+        return new RecipeShareSave(recipe, serves, ingredients, mUserId);
     }
 
     private void refreshDisplay() {
@@ -176,14 +170,11 @@ public class CreatePostActivity extends AppCompatActivity {
 
         alertBuilder.setPositiveButton(getString(R.string.yes),
                 (dialog, which) -> {
-//                    clearUserFromIntent();
                     Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                     clearUserFromPref();
-//                    mUserId = -1;
-//                    checkForUser();
                 });
         alertBuilder.setNegativeButton(getString(R.string.no),
                 (dialog, which) -> {
@@ -232,12 +223,6 @@ public class CreatePostActivity extends AppCompatActivity {
                 updateDisplayForUpdatedPost(updatedPostId);
             }
         }
-    }
-
-    public static Intent intentFactory(Context context, int userId) {
-        Intent intent = new Intent(context, CreatePostActivity.class);
-        intent.putExtra(CreatePostActivity.USER_ID_KEY, userId);
-        return intent;
     }
 
     @Override
