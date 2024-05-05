@@ -9,6 +9,15 @@
         tools:context=".Activities.LandingPage">
 
         <Button
+            android:id="@+id/notificationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="112dp"
+            android:text="Send Broadcast"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
             android:id="@+id/adminButton"
             android:layout_width="250dp"
             android:layout_height="50dp"
@@ -38,7 +47,6 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginTop="48dp"
-
             android:text="@string/view_my_posts"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"

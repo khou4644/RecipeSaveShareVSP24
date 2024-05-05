@@ -46,6 +46,11 @@ public class CreatePostActivity extends AppCompatActivity {
     private User mUser;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
@@ -55,6 +60,8 @@ public class CreatePostActivity extends AppCompatActivity {
         getDataBase();
 
         mUserId = getIntent().getIntExtra(USER_ID_KEY, mUserId);
+        mUser = mRecipeShareSaveDAO.getUserByUserId(mUserId);
+
 
 
         mMainDisplay = binding.createPostDisplay;

@@ -1,7 +1,21 @@
 package com.example.recipesavesharevsp24.Activities;
-
-import static com.example.recipesavesharevsp24.Activities.MyPostActivity.EDIT_POST_REQUEST_CODE;
-
+import android.app.AlarmManager ;
+import android.app.Notification ;
+import android.app.NotificationChannel;
+import android.app.NotificationManager ;
+import android.app.PendingIntent ;
+import android.content.Context ;
+import android.content.Intent ;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.os.Build;
+import android.os.Bundle ;
+import android.os.SystemClock ;
+//import android.support.v4.app.NotificationCompat ;
+//import android.support.v7.app.AppCompatActivity ;
+import android.view.Menu ;
+import android.view.MenuItem ;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,14 +28,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static com.example.recipesavesharevsp24.Activities.MyPostActivity.EDIT_POST_REQUEST_CODE;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
+import com.example.recipesavesharevsp24.NoRecipeNotificationReceiver;
+import com.example.recipesavesharevsp24.PushNotificationReceiver;
 import com.example.recipesavesharevsp24.R;
 import com.example.recipesavesharevsp24.databinding.PageLandingBinding;
 
@@ -37,6 +56,9 @@ public class LandingPage extends AppCompatActivity {
     private Button mViewPostsButton;
     private Button mViewMyPostsButton;
     private Button mCreateNewPostButton;
+    private Button mButton;
+
+    private static final String CHANNEL_ID = "TEST_notification_channel";
 
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
 
@@ -45,11 +67,22 @@ public class LandingPage extends AppCompatActivity {
     private SharedPreferences mPreferences = null;
     private User mUser;
 
+    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
+    private final static String default_notification_channel_id = "default" ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = PageLandingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        mButton = findViewById(R.id.notificationButton);
+        mButton.setOnClickListener(v -> {
+            makeNotifications();
+        });
+
+        // Initialize the notificationButton after setting the content view
+        // notificationButton = findViewById(R.id.notificationButton); // Comment out or remove this line
 
         getPrefs();
 
@@ -88,7 +121,47 @@ public class LandingPage extends AppCompatActivity {
             intent.putExtra(USER_ID_KEY, mUserId);
             startActivity(intent);
         });
+
+
     }
+
+    public void makeNotifications() {
+        String channelID = "CHANNEL_ID_NOTIFICATION";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelID);
+        builder.setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("Recipe Notification")
+                .setContentText("Notifications for Recipes")
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(getApplicationContext(), LandingPage.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("data", "values");
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                0, intent, PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel =
+                    notificationManager.getNotificationChannel(channelID);
+            if (notificationChannel == null) {
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(channelID,
+                        "DescTest", importance);
+                notificationChannel.setLightColor(Color.GREEN);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+
+        notificationManager.notify(0, builder.build());
+    }
+
+
+
 
     private void loginUser(int userId) {
         mUser = mRecipeShareSaveDAO.getUserByUserId(userId);
@@ -156,16 +229,21 @@ public class LandingPage extends AppCompatActivity {
 
     private void checkAdminUser() {
         if (mUser != null && mRecipeShareSaveDAO.isUserAdmin(mUser.getUserId())) {
-            mAdminButton.setVisibility(View.VISIBLE);
-            mAdminButton.setOnClickListener(v -> {
-                Intent intent = new Intent(LandingPage.this, AdminMenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            });
+            if (mAdminButton != null) {
+                mAdminButton.setVisibility(View.VISIBLE);
+                mAdminButton.setOnClickListener(v -> {
+                    Intent intent = new Intent(LandingPage.this, AdminMenuActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
+            }
         } else {
-            mAdminButton.setVisibility(View.INVISIBLE);
+            if (mAdminButton != null) {
+                mAdminButton.setVisibility(View.INVISIBLE);
+            }
         }
     }
+
     private void clearUserFromIntent(){
         getIntent().putExtra(USER_ID_KEY, -1);
     }
@@ -190,10 +268,6 @@ public class LandingPage extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.item1) {
-            logoutUser();
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -201,12 +275,5 @@ public class LandingPage extends AppCompatActivity {
         Intent intent = new Intent(context, LandingPage.class);
         intent.putExtra(USER_ID_KEY, userId);
         return intent;
-    }
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }

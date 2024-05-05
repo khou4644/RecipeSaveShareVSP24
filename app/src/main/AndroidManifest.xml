@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -26,9 +32,12 @@
             android:name=".Activities.CreateAccountActivity"
             android:exported="false" />
 
+
+
         <activity
             android:name=".Activities.LandingPage"
-            android:exported="false" />
+            android:exported="false"/>
+
 
         <activity
             android:name=".Activities.LoginActivity"
@@ -57,10 +66,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".Activities.EditMyPostActivity"
-            android:parentActivityName=".Activities.MyPostActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.AdminMenuActivity"
             android:parentActivityName=".Activities.LandingPage"
             android:exported="false" />
@@ -77,6 +82,13 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <receiver
+            android:name=".PushNotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.recipesavesharevsp24.PUSH_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
