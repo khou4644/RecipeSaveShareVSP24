@@ -54,8 +54,9 @@ public class CreatePostActivity extends AppCompatActivity {
         getPrefs();
         getDataBase();
 
-        mUserId = getIntent().getIntExtra(USER_ID_KEY, mUserId);
 
+        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
+        mUser = mRecipeShareSaveDAO.getUserByUserId(mUserId);
 
         mMainDisplay = binding.createPostDisplay;
         mRecipe = binding.createPostRecipeEditText;

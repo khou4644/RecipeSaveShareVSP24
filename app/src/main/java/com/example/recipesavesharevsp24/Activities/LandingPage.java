@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import org.jetbrains.annotations.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +23,7 @@ import androidx.room.Room;
 import com.example.recipesavesharevsp24.DB.AppDataBase;
 import com.example.recipesavesharevsp24.DB.RecipeShareSaveDAO;
 import com.example.recipesavesharevsp24.R;
-import com.example.recipesavesharevsp24.databinding.PageLandingBinding;
+
 
 import java.util.List;
 
@@ -31,12 +31,15 @@ public class LandingPage extends AppCompatActivity {
 
     private static final String USER_ID_KEY = "com.example.recipesavesharevsp24.userIdKey";
     private static final String PREFERENCES_KEY = "com.example.recipesavesharevsp24.PREFERENCES_KEY";
-    private PageLandingBinding binding;
+
+    private static final int REQUEST_CODE_NEW_USERNAME = 1; //default request code to update username on options menu(top right)
 
     private Button mAdminButton;
     private Button mViewPostsButton;
     private Button mViewMyPostsButton;
     private Button mCreateNewPostButton;
+    private Button mNewUsernameButton;
+    private Button mNewPasswordButton;
 
     private RecipeShareSaveDAO mRecipeShareSaveDAO;
 
@@ -48,15 +51,14 @@ public class LandingPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = PageLandingBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.page_landing);
 
         getPrefs();
 
         getDataBase();
 
         mAdminButton = findViewById(R.id.adminButton);
-        mUserId = getIntent().getIntExtra(USER_ID_KEY, mUserId);
+        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
         if (mUserId != -1) {
             loginUser(mUserId);
             checkAdminUser();
@@ -88,6 +90,20 @@ public class LandingPage extends AppCompatActivity {
             intent.putExtra(USER_ID_KEY, mUserId);
             startActivity(intent);
         });
+
+        mNewUsernameButton = findViewById(R.id.NewUsernameButton);
+        mNewUsernameButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingPage.this, NewUsernameActivity.class);
+            intent.putExtra(USER_ID_KEY, mUserId);
+            startActivityForResult(intent, REQUEST_CODE_NEW_USERNAME); // Used to keep update username on top right of options menu after creating new username in database
+        });
+
+        mNewPasswordButton = findViewById(R.id.NewPasswordButton);
+        mNewPasswordButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingPage.this, NewPasswordActivity.class);
+            intent.putExtra(USER_ID_KEY, mUserId);
+            startActivity(intent);
+        });
     }
 
     private void loginUser(int userId) {
@@ -96,7 +112,7 @@ public class LandingPage extends AppCompatActivity {
             // Check if we have any users at all
             List<User> users = mRecipeShareSaveDAO.getAllUsers();
 
-            // Retrieve the user again after creating the predefined users
+            // Retrieve the user again
             mUser = mRecipeShareSaveDAO.getUserByUserId(userId);
             if (mUser == null) {
                 // Handle the case when the user is still not found
@@ -203,6 +219,21 @@ public class LandingPage extends AppCompatActivity {
         return intent;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                String newUsername = data.getStringExtra("NEW_USERNAME");
+                if (newUsername != null) {
+                    // Update the mUser object with the new username
+                    mUser.setUserName(newUsername);
+                    invalidateOptionsMenu(); // Refresh the menu with the new username
+                }
+            }
+        }
+    }
 
 
     @Override

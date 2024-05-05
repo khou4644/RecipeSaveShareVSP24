@@ -35,7 +35,6 @@
             android:parentActivityName=".Activities.MainActivity"
             android:exported="false" />
 
-
         <activity
             android:name=".Activities.CreatePostActivity"
             android:parentActivityName=".Activities.LandingPage"
@@ -55,11 +54,6 @@
             android:name=".Activities.MyPostActivity"
             android:parentActivityName=".Activities.LandingPage"
             android:exported="false" />
-
-        <activity
-            android:name=".Activities.EditMyPostActivity"
-            android:parentActivityName=".Activities.MyPostActivity"
-            android:exported="false" />
         <activity
             android:name=".Activities.AdminMenuActivity"
             android:parentActivityName=".Activities.LandingPage"
@@ -72,6 +66,15 @@
             android:name=".Activities.AdminViewPostsActivity"
             android:parentActivityName=".Activities.AdminMenuActivity"
             android:exported="false" />
+        <activity
+            android:name=".Activities.NewPasswordActivity"
+            android:parentActivityName=".Activities.LandingPage"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.NewUsernameActivity"
+            android:parentActivityName=".Activities.LandingPage"
+            android:exported="false" />
+
 
         <meta-data
             android:name="preloaded_fonts"

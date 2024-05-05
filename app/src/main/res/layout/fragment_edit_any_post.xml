@@ -32,6 +32,7 @@
         android:id="@+id/buttonUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/black_han_sans"
         android:text="@string/update" />
 
 </LinearLayout>

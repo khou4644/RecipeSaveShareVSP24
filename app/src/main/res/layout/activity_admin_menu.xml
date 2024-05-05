@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Admin Menu"
-        android:textSize="24sp"
+        android:id="@+id/textView3"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/black_han_sans"
+        android:text="Admin Menu"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/viewAllPostsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View All User Posts" />
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="120dp"
+        android:fontFamily="@font/black_han_sans"
+        android:text="View All User Posts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/viewAllUsersButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View All Users" />
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/black_han_sans"
+        android:text="View All Users"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewAllPostsButton" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
