@@ -35,6 +35,11 @@
             android:exported="false" />
 
         <activity
+            android:name=".Activities.LikedPostActivity"
+            android:parentActivityName=".Activities.PostActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".Activities.PostActivity"
             android:parentActivityName=".Activities.LandingPage"
             android:exported="false" />
@@ -49,9 +54,17 @@
             android:parentActivityName=".Activities.MyPostActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.LikedPostActivity"
-            android:parentActivityName=".Activities.PostActivity"
-            android:exported="false"/>
+            android:name=".Activities.AdminMenuActivity"
+            android:parentActivityName=".Activities.LandingPage"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.AdminViewUsersActivity"
+            android:parentActivityName=".Activities.AdminMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.AdminViewPostsActivity"
+            android:parentActivityName=".Activities.AdminMenuActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

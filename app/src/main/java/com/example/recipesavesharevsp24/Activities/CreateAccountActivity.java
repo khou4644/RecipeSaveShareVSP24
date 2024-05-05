@@ -43,7 +43,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (isUsernameDuplicate(username)) {
                     Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show();
                 } else {
-                    User newUser = new User(username, password, false);
+                    User newUser = new User(username, password, false, false);
                     mRecipeShareSaveDAO.insert(newUser);
                     Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = LoginActivity.intentFactory(CreateAccountActivity.this);

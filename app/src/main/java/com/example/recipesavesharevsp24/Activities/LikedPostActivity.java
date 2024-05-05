@@ -56,6 +56,12 @@ public class LikedPostActivity extends AppCompatActivity {
         mPostAdapter.setPosts(likedPosts);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     @SuppressLint("ResourceType")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,9 +93,4 @@ public class LikedPostActivity extends AppCompatActivity {
         builder.show();
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
 }

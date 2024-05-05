@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 
@@ -59,6 +60,8 @@ public class LandingPage extends AppCompatActivity {
     private SharedPreferences mPreferences = null;
     private User mUser;
 
+    private LiveData<User> userLiveData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,8 @@ public class LandingPage extends AppCompatActivity {
         if (mUserId != -1) {
             loginUser(mUserId);
             checkAdminUser();
-        } else {
+        }
+        else {
             // Handle the case when no user ID is found in the intent
             // For example, you can redirect to the login screen
             Intent intent = LoginActivity.intentFactory(this);
@@ -157,11 +161,7 @@ public class LandingPage extends AppCompatActivity {
 //    }
 
     private void getDataBase() {
-        mRecipeShareSaveDAO = Room.databaseBuilder(this, AppDataBase.class, AppDataBase.DATABASE_NAME)
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build()
-                .RecipeShareSaveDAO();
+        mRecipeShareSaveDAO = AppDataBase.getInstance(this).RecipeShareSaveDAO();
     }
 
 //    private void checkForUser() {
@@ -227,6 +227,11 @@ public class LandingPage extends AppCompatActivity {
     private void checkAdminUser() {
         if (mUser != null && mRecipeShareSaveDAO.isUserAdmin(mUser.getUserId())) {
             mAdminButton.setVisibility(View.VISIBLE);
+            mAdminButton.setOnClickListener(v -> {
+                Intent intent = new Intent(LandingPage.this, AdminMenuActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            });
         } else {
             mAdminButton.setVisibility(View.INVISIBLE);
         }

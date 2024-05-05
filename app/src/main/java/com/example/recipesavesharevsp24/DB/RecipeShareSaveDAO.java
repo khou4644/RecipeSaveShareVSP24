@@ -89,4 +89,13 @@ public interface RecipeShareSaveDAO {
 
     @Query("DELETE FROM post_interactions WHERE user_id = :userId AND post_id = :postId")
     void removeLike(int userId, int postId);
+
+    @Query("UPDATE " + AppDataBase.USER_TABLE + " SET misBanned = 1 WHERE mUserId = :userId")
+    void banUser(int userId);
+
+    @Query("SELECT * FROM "+ AppDataBase.USER_TABLE + " WHERE mUserId = :userId")
+    LiveData<User> getUserLiveData(int userId);
+
+    @Query("UPDATE " + AppDataBase.RECIPESHARESAVE_TABLE + " SET isReported = :reported WHERE mLogId = :postId")
+    void updateReportedStatus(int postId, boolean reported);
 }
