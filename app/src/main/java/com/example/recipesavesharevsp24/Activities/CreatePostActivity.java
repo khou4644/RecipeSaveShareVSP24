@@ -56,21 +56,20 @@ public class CreatePostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_create_post);
+        setContentView(binding.getRoot());
 
         getPrefs();
         getDataBase();
 
 
-        mUserId = getIntent().getIntExtra(USER_ID_KEY, mUserId);
+        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
         mUser = mRecipeShareSaveDAO.getUserByUserId(mUserId);
 //        cookTextView = findViewById(R.id.CookingTime);
 //        String data = getIntent().getStringExtra("data");
 //        cookTextView.setText(data);
 
 
-        mUserId = getIntent().getIntExtra(USER_ID_KEY, -1);
-        mUser = mRecipeShareSaveDAO.getUserByUserId(mUserId);
+
 
         mMainDisplay = binding.createPostDisplay;
         mRecipe = binding.createPostRecipeEditText;
