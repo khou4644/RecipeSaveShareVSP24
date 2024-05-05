@@ -84,6 +84,13 @@ public class EditAnyPostFragment extends DialogFragment {
         mRecipeShareSaveDAO.updateRecipeShareSave(updatedPost);
 
         Toast.makeText(requireContext(), "Post updated successfully", Toast.LENGTH_SHORT).show();
+
+        // Refresh the post list in AdminViewPostsActivity
+        AdminViewPostsActivity activity = (AdminViewPostsActivity) getActivity();
+        if (activity != null) {
+            activity.refreshPostList();
+        }
+
         dismiss();
     }
 }
