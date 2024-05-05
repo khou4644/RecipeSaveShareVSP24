@@ -75,13 +75,6 @@ public class MyPostActivity extends AppCompatActivity {
         fragment.show(getSupportFragmentManager(), "EditMyPostFragment");
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.example_menu, menu);
-        return true;
-    }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mUser != null){
@@ -90,19 +83,25 @@ public class MyPostActivity extends AppCompatActivity {
         }
         return super.onPrepareOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.example_menu, menu);
+        MenuItem likedPostsItem = menu.findItem(R.id.liked_posts);
+        likedPostsItem.setVisible(false);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.liked_posts) {
-            Intent intent = new Intent(this, LikedPostActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.liked_posts) {
-            Intent intent = new Intent(MyPostActivity.this, LikedPostActivity.class);
-            startActivity(intent);
+        if (item.getItemId() == R.id.item1) {
+            logoutUser();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void logoutUser(){
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setMessage(R.string.logout);
