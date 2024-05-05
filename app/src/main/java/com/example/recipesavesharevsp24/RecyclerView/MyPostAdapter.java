@@ -173,6 +173,7 @@ public class                                    MyPostAdapter extends RecyclerVi
         TextView likeCountTextView;
         TextView postTextView;
         Button editButton;
+        TextView reportedTextView;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -181,6 +182,7 @@ public class                                    MyPostAdapter extends RecyclerVi
             likeCountTextView = itemView.findViewById(R.id.likeCountTextView);
             postTextView = itemView.findViewById(R.id.postTextView);
             editButton = itemView.findViewById(R.id.editButton);
+            reportedTextView = itemView.findViewById(R.id.reportedTextView);
 
             // Check if likeButton is null after initialization
             if (likeButton == null) {

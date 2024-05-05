@@ -45,14 +45,7 @@ public class AdminMenuActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        // Navigate to the LandingPageActivity
-        super.onBackPressed();
-        Intent intent = new Intent(AdminMenuActivity.this, LandingPage.class);
-        startActivity(intent);
-        //finish(); // Optional: Finish the current activity to prevent going back to it
-    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

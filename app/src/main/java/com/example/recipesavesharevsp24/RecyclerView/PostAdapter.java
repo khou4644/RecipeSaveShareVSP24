@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipesavesharevsp24.Activities.PostInteraction;
@@ -54,6 +55,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         User user = mRecipeShareSaveDAO.getUserByUserId(post.getUserId());
         String username = user != null ? user.getUserName() : "Unknown User";
         holder.postTextView.setText("Username: " + username + "\n" + post);
+
+        // Show or hide the "Reported" text based on the post's reported status
+        holder.reportedTextView.setVisibility(post.isReported() ? View.VISIBLE : View.GONE);
 
         // Get the current user's interaction with the post
         PostInteraction postInteraction = mRecipeShareSaveDAO.getPostInteractionByUserIdAndPostId(getCurrentUserId(), post.getLogId());
@@ -156,6 +160,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView likeCountTextView;
         TextView dislikeCountTextView;
         TextView postTextView;
+        TextView reportedTextView;
 
         PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -164,6 +169,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             likeCountTextView = itemView.findViewById(R.id.likeCountTextView);
             dislikeCountTextView = itemView.findViewById(R.id.dislikeCountTextView);
             postTextView = itemView.findViewById(R.id.postTextView);
+            reportedTextView = itemView.findViewById(R.id.reportedTextView);
         }
     }
 }

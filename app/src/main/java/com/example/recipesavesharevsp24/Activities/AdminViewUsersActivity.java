@@ -21,42 +21,6 @@ public class AdminViewUsersActivity extends AppCompatActivity {
     private AdminViewUserAdapter adminUserAdapter;
     private RecipeShareSaveDAO recipeShareSaveDAO;
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_admin_view_users);
-//
-//        // Initialize the RecipeShareSaveDAO
-//        recipeShareSaveDAO = Room.databaseBuilder(this, AppDataBase.class, AppDataBase.DATABASE_NAME)
-//                .allowMainThreadQueries()
-//                .build()
-//                .RecipeShareSaveDAO();
-//
-//        // Initialize the RecyclerView and set up the adapter
-//        userRecyclerView = findViewById(R.id.userRecyclerView);
-//        userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        adminUserAdapter = new AdminViewUserAdapter(this, recipeShareSaveDAO);
-//        userRecyclerView.setAdapter(adminUserAdapter);
-//
-//        // Load and set the user data for the adapter
-//        List<User> users = recipeShareSaveDAO.getAllUsers();
-//        adminUserAdapter.setUsers(users);
-//
-//        // Set up the "Ban" button click listener
-//        adminUserAdapter.setOnBanClickListener((userId, username, isBanned) -> {
-//            User user = recipeShareSaveDAO.getUserByUserId(userId);
-//            if (user != null) {
-//                user.setMisBanned(isBanned);
-//                recipeShareSaveDAO.update(user); // Update the user in the database
-//
-//                String action = isBanned ? "banned" : "unbanned";
-//                Toast.makeText(this, "User " + username + " has been " + action, Toast.LENGTH_SHORT).show();
-//
-//                // Update the UI
-//                adminUserAdapter.notifyDataSetChanged();
-//            }
-//        });
-//    }
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

@@ -35,6 +35,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".Activities.LikedPostActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".Activities.PostActivity"
             android:parentActivityName=".Activities.LandingPage"
             android:exported="false" />
@@ -54,6 +58,10 @@
             android:exported="false" />
         <activity
             android:name=".Activities.AdminViewUsersActivity"
+            android:parentActivityName=".Activities.AdminMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.AdminViewPostsActivity"
             android:parentActivityName=".Activities.AdminMenuActivity"
             android:exported="false" />
 

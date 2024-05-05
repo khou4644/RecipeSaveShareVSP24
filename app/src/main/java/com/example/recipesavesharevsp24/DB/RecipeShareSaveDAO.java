@@ -1,6 +1,6 @@
 package com.example.recipesavesharevsp24.DB;
 
-import androidx.lifecycle.  LiveData;
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -86,5 +86,8 @@ public interface RecipeShareSaveDAO {
 
     @Query("SELECT * FROM "+ AppDataBase.USER_TABLE + " WHERE mUserId = :userId")
     LiveData<User> getUserLiveData(int userId);
+
+    @Query("UPDATE " + AppDataBase.RECIPESHARESAVE_TABLE + " SET isReported = :reported WHERE mLogId = :postId")
+    void updateReportedStatus(int postId, boolean reported);
 
 }

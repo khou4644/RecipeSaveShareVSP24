@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipesavesharevsp24.Activities.User;
@@ -40,24 +39,6 @@ public class AdminViewUserAdapter extends RecyclerView.Adapter<AdminViewUserAdap
         return new UserViewHolder(view);
     }
 
-//    @Override
-//    public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-//        User user = users.get(position);
-//        holder.usernameTextView.setText(user.getUserName());
-//
-//        // Set the initial button state based on the user's ban status
-//        if(user.isMisBanned()){
-//            holder.banButton.setText("Unban User");
-//            holder.banButton.setBackgroundColor(Color.LTGRAY);
-//        }else{
-//            //default text already exists
-//            holder.banButton.setBackgroundColor(Color.RED);
-//        }
-//
-//        holder.banButton.setOnClickListener(v -> {
-//            showBanConfirmationDialog(user.getUserId(), user.getUserName(), !user.isMisBanned());
-//        });
-//    }
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
@@ -69,29 +50,20 @@ public class AdminViewUserAdapter extends RecyclerView.Adapter<AdminViewUserAdap
             holder.banButton.setText("Unban User");
             holder.banButton.setBackgroundColor(Color.LTGRAY);
         } else {
+            holder.banButton.setText("Ban User");
             holder.banButton.setBackgroundColor(Color.RED);
         }
-
 
         holder.banButton.setOnClickListener(v -> {
             showBanConfirmationDialog(user, !user.isMisBanned());
         });
 
-//        holder.banButton.setOnClickListener(v -> {
-//            if (onBanClickListener != null) {
-//                onBanClickListener.onBanClick(user);
-//            }
-//        });
 
         holder.deleteButton.setOnClickListener(v -> {
             showDeleteConfirmationDialog(user);
         });
 
-//        holder.deleteButton.setOnClickListener(v -> {
-//            if (onDeleteClickListener != null) {
-//                onDeleteClickListener.onDeleteClick(user);
-//            }
-//        });
+
 
     }
 
@@ -115,9 +87,6 @@ public class AdminViewUserAdapter extends RecyclerView.Adapter<AdminViewUserAdap
         this.onDeleteClickListener = listener;
     }
 
-//    public interface OnBanClickListener {
-//        void onBanClick(int userId, String username, boolean isBanned);
-//    }
 
     public interface OnBanClickListener {
         void onBanClick(User user);
@@ -175,19 +144,5 @@ public class AdminViewUserAdapter extends RecyclerView.Adapter<AdminViewUserAdap
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-//    private void showBanConfirmationDialog(int userId, String username, boolean isBanned) {
-//        String dialogTitle = isBanned ? "Ban User" : "Unban User";
-//        String dialogMessage = isBanned ? "Are you sure you want to ban " + username + "?" : "Are you sure you want to unban " + username + "?";
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setTitle(dialogTitle)
-//                .setMessage(dialogMessage)
-//                .setPositiveButton(dialogTitle, (dialog, which) -> {
-//                    if (onBanClickListener != null) {
-//                        onBanClickListener.onBanClick(userId, username, isBanned);
-//                    }
-//                })
-//                .setNegativeButton("Cancel", null)
-//                .show();
-//    }
+
 }

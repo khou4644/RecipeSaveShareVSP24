@@ -120,9 +120,8 @@ public class MyPostActivity extends AppCompatActivity {
 
     }
 
-    // Include the rest of the methods from PostActivity, such as onCreateOptionsMenu, onPrepareOptionsMenu, onOptionsItemSelected, logoutUser, clearUserFromPref, and getPrefs
+    // Included the rest of the methods from PostActivity, such as onCreateOptionsMenu, onPrepareOptionsMenu, onOptionsItemSelected, logoutUser, clearUserFromPref, and getPrefs
 
-    // You might also want to add a menu item or button to navigate to this activity from other activities (e.g., LandingPage)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -11,7 +11,7 @@ import com.example.recipesavesharevsp24.Activities.PostInteraction;
 import com.example.recipesavesharevsp24.Activities.RecipeShareSave;
 import com.example.recipesavesharevsp24.Activities.User;
 
-@Database(entities = {RecipeShareSave.class, User.class, PostInteraction.class}, version = 4, exportSchema = true)
+@Database(entities = {RecipeShareSave.class, User.class, PostInteraction.class}, version = 6, exportSchema = true)
 @TypeConverters({com.example.recipesavesharevsp24.DB.DateTypeConverter.class})
 public abstract class AppDataBase extends RoomDatabase {
     public static final String DATABASE_NAME = "RecipeShareSave.db";
@@ -29,8 +29,10 @@ public abstract class AppDataBase extends RoomDatabase {
             synchronized (LOCK){
                 if (instance == null){
                     instance = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDataBase.class,
-                            DATABASE_NAME).build();
+                            AppDataBase.class, DATABASE_NAME)
+                            .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
+                            .build();
                 }
             }
         }
