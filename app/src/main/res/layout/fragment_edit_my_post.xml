@@ -7,8 +7,8 @@
 
     <EditText
         android:id="@+id/editTextRecipe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:hint="@string/recipe"
         android:maxLines="2"
         android:inputType="textMultiLine" />
